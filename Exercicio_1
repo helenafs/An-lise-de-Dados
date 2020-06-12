@@ -204,9 +204,11 @@ df_reduzido<- df[1:3,1:2]
 #Elaborar uma explicação causal teórica
 
 #Elaborar hipóteses
-#hipótese nula
+#Hipótese alternativa – H1
+#Hipótese nula – H0 
 
-#Pensar em como operacionalizar os conceitos teóricos em variáveis empíricas RENDA MENSAL:SALÁRIO TOTAL DA FAMÍLIA, MICROCEFALIA: SIM OU NÃO, 1 OU 0.
-#a renda está negativamente correlacionada com a ocorrência de microcefalia resultante da Zyka, quanto maior a renda, menor o número de casos
+#Pensar em como operacionalizar os conceitos teóricos em variáveis empíricas 
+#RENDA: , MICROCEFALIA: SIM OU NÃO, 1 OU 0.
 
 #Estabelecer o tipo de relação entre as variáveis operacionalizadas: RENDA - VI E MICROCEFALIA - VD
+#A renda está negativamente correlacionada com a ocorrência de microcefalia resultante da Zyka, quanto maior a renda, menor o número de casos
