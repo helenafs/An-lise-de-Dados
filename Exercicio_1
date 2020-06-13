@@ -203,12 +203,28 @@ df_reduzido<- df[1:3,1:2]
 
 #Elaborar uma explicação causal teórica
 
+#A saúde é considerada um dos direitos fundamentais na Constituição Federal de 1988 e 
+#por sua vez ela demanda a garantia de direitos fundamentais, como: trabalho em condições 
+#apropriadas; alimentação saudável; moradia higiênica e digna; educação e informação plena; 
+#qualidade do meio ambiente; transporte seguro e acessível; repouso, lazer e segurança. (RAMOS; DINIZ, 2017, p. 174). 
+#Por essas características é imprescindível discutir a relação entre classe social e saúde no Brasil 
+#e como os fatores espaciais com padrões, interagem com a desigualdade de renda (SANTOS, 2018).
+#“A maior parte dos problemas de saúde pode ser atribuída às condições sociais nas quais as pessoas 
+#vivem e trabalham: essas condições se denominam ‘determinantes sociais de saúde’” (AKERMAN et al., 2011, p. 5).
+#No Nordeste e, posteriormente, em outras regiões do país, ocorreu uma rápida dispersão do Vírus Zika, além do aumento de recém-nascidos 
+#com microcefalia (OLIVEIRA; VASCONCELOS, 2016). 
+#De acordo com o PNUD e IFRC (2017) o vírus Zika afetou “grupos e mulheres de baixa renda de forma desproporcional.”. 
+#Nunes e Pimenta (2016, p. 31) citam: “A partir do debate sobre os determinantes e as condições sociais, econômicas 
+#e políticas que geram e perpetuam a propagação do vetor e do vírus, a Zika foi também enquadrada como “doença negligenciada” 
+#ou “da pobreza””. 
+
+
 #Elaborar hipóteses
-#Hipótese alternativa – H1
-#Hipótese nula – H0 
+#Hipótese alternativa – H1 A renda é um dos fatores que causa a maior ocorrência de microcefalia congênita decorrente do vírus Zika.
+#Hipótese nula – H0 A renda não é um dos fatores que causa a maior ocorrência de microcefalia congênita decorrente do vírus Zika.
 
 #Pensar em como operacionalizar os conceitos teóricos em variáveis empíricas 
-#RENDA: , MICROCEFALIA: SIM OU NÃO, 1 OU 0.
+#RENDA: RENDA PERCAPTA, MICROCEFALIA: SIM OU NÃO, 1 OU 0.
 
 #Estabelecer o tipo de relação entre as variáveis operacionalizadas: RENDA - VI E MICROCEFALIA - VD
 #A renda está negativamente correlacionada com a ocorrência de microcefalia resultante da Zyka, quanto maior a renda, menor o número de casos
