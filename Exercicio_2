@@ -241,9 +241,8 @@ df_filtrado%>%
           case_when(ftgr_cons >= 0 & ftgr_cons < 33 ~"liberal",
                     ftgr_cons >= 34 & ftgr_cons < 36 ~"centro",
                     ftgr_cons >= 67 & ftgr_cons < 100 ~"conservador"))%>%
-  mutate(obama_vote = recode(obama_vote,
-                             0 = "não", 
-                             1 = "sim"))
+  mutate(obama_vote = case_when(obama_vote >= 0  & obama_vote < 1 ~ "não", 
+                                obama_vote >= 1 ~ "sim"))
 
 
 # Demonstre como observar a quantidade de pessoas em cada uma das
@@ -293,7 +292,7 @@ df_filtrado %>%
 
 #c - Qual é o desenho de pesquisa? 
 #Dessa forma, foram estimadas as probabilidades de o jovem estudar/trabalhar/procurar 
-#emprego através de um modelo logit multinomialcom seis categorias exaustivas e mutuamente exclusivas: 
+#emprego através de um modelo logit multinomial com seis categorias exaustivas e mutuamente exclusivas: 
 #(a) Não estuda, não trabalha e não procura emprego (NE NT NP); (b) Não estuda, não trabalha e procura emprego (NE NT P); 
 #(c) Estuda, não trabalha e procura emprego (E NT P; 
 #(d) Estuda, não trabalha e não procura emprego (E NT NP); (e) Não estuda e trabalha (NE T); 
