@@ -235,12 +235,15 @@ str(df_filtrado)
 # a variável obama_vote para trocar o 1 por "Sim" e 2 por "não"
 
 
-df_filtrado %>%
+df_filtrado%>%
+  mutate(white = (dem_raceeth == "1. White non-Hispanic")) %>%
   mutate(ftgr_cons = 
           case_when(ftgr_cons >= 0 & ftgr_cons < 33 ~"liberal",
                     ftgr_cons >= 34 & ftgr_cons < 36 ~"centro",
                     ftgr_cons >= 67 & ftgr_cons < 100 ~"conservador"))%>%
- 
+  mutate(obama_vote = recode(obama_vote,
+                             0 = "não", 
+                             1 = "sim"))
 
 
 # Demonstre como observar a quantidade de pessoas em cada uma das
