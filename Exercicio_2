@@ -11,10 +11,6 @@ install.packages("poliscidata")
 # B     8
 # B    12
 
-x<- c("A","A","B","B")
-y<- c(5,3,8,12)
-df <- data.frame(x,y)
-
 # Complete o código que obtém o seguinte resultado:
 #
 #        z
@@ -32,12 +28,6 @@ summarise(z = mean(y))
 # 8.04  9.14  7.46  6.58
 # 6.95  8.14  6.77  5.76
 # 7.58  8.74  12.74 7.71
-
-y1 <-c(8.04,6.95,7.58)
-y2 <-c(9.14,8.14,8.74)
-y3 <-c(7.46,6.77,12.74)
-y4 <-c(6.58,5.76,7.71)
-df<- data.frame(y1,y2,y3,y4)
 
 # Complete o código que obtém o seguinte resultado:
 
@@ -58,10 +48,6 @@ select(y1)
 #   6  8
 #   2  3
 #   4  5
-
-x <- c(1,6,2,4)
-y <- c(10,8,3,5)
-df <- data.frame(x,y)
 
 # Complete o código que obtém o seguinte resultado, fazendo uma operação
 # entre x e y
@@ -87,10 +73,6 @@ mutate(z=x-y)
 #    NYC   150
 #    NYC   250
 
-city <- c("Boston","Boston","NYC","NYC")
-sales <- c(220,125,150,250)
-df <- data.frame(city,sales)
-
 # Complete o código que obtém o seguinte resultado:
 #
 # city   avg_sales
@@ -111,10 +93,6 @@ df %>%
 #  1    60    63
 #  4    65    67
 
-week <- c(3,2,1,4)
-min <- c(55,52,60,65)
-max <- c(50,56,63,67)
-df <- data.frame(week,min,max)
 # Complete o código que obtém o seguinte resultado:
 #
 #week   min   max
@@ -135,12 +113,6 @@ arrange(week)
 #  A      4      W2     21
 #  B      6      W1     26
 #  B      8      W2     30
-
-x_b_1<- c("A","A","B","B")
-x_b_2<- c(2,4,6,8)
-y_c_1<- c("W1","W2","W1","W2")
-y_c_2<- c(25,21,26,30)
-df <- data.frame(x_b_1,x_b_2,y_c_1,y_c_2)
 
 # Complete o código que obtém o seguinte resultado:
 #
@@ -221,8 +193,6 @@ df %>%
 
 library(poliscidata)
 df <- nes
-
-
 
 # Faça uma primeira exploração do banco de dados com todos os comandos
 # passados até aqui que possuem esse objetivo
@@ -337,9 +307,17 @@ df_filtrado %>%
 #No caso do artigo sim, ao menos que se leve em conta um trabalho de risco que cause um acidente e provoque uma deficiência adquirida. 
 #3 Existe covariação entre X e Y? - análise empírica que mostre a associação entre as variáveis
 #4 Foi levado em consideração outras variáveis Z que podem fazer a associação entre X e Y desaparecer? - 
-variável confounding correlacionada com a variável dependente e independente
+#Sim, o estudo usou como variável de controle a idade, cor, raça, gênero, recebimento de pensão, 
+#se o jovem é chefe de família, a renda domiciliar per capita, características do domicílio 
+#(número de pessoas, número de menores de 10 anos e ao número de pessoas com ensino superior) e características 
+#de localização do domicílio. 
 
 #e – O que ele conclui? 
+#Em termos gerais, os resultados indicaram que a deﬁciência contribui para diminuir a educação e o trabalho dos jovens, 
+#o que evidencia a necessidade de maiores esforços em termos de políticas públicas para promover a participação econômica 
+#e social dessa população. As exceções a esse resultado geral são uma evidência de que as políticas de educação especial e de 
+#cotas de emprego para pessoas com deﬁciência alcançam de forma diferenciada as categorias dessa condição, o que sugere a necessidade 
+#de políticas especíﬁcas para cada grupo.
 
 #f - Como a sua pesquisa dá um passo a mais para o desenvolvimento teórico presente neste artigo?
 #Minha pesquisa inclui a variável Renda na investigação. 
@@ -357,7 +335,8 @@ e quais problemas ele pode ter em cada uma delas.
 #se for uma deficiência adquirida através de trabalhos perigosos por pessoas de classes sociais mais baixas, 
 #ou uma deficiência congênita causada por doenças que tenham como determinantes sociais a pobreza.
 #3 Existe covariação entre X e Y? 
+#De acordo com a teoria é provável que a deficiência tenha uma covariação positiva em relação à renda.  
 #4 Foi levado em consideração outras variáveis Z que podem fazer a associação entre 
 #X e Y desaparecer? 
-
+#De acordo com o banco de dados que vou utilizar é preciso pensar quais variáveis "confounding" posso encontrar. 
 
