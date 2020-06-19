@@ -1,0 +1,359 @@
+install.packages("tidyverse")
+library(tidyverse)
+install.packages("poliscidata")
+
+
+# Suponha que tenhamos o dataframe df abaixo
+#
+# x     y
+# A     5
+# A     3
+# B     8
+# B    12
+
+x<- c("A","A","B","B")
+y<- c(5,3,8,12)
+df <- data.frame(x,y)
+
+# Complete o código que obtém o seguinte resultado:
+#
+#        z
+#        7
+#
+
+df %>%
+summarise(z = mean(y))
+
+#######################################################################
+
+# Suponha que tenhamos o dataframe df abaixo
+#
+# y1    y2    y3    y4
+# 8.04  9.14  7.46  6.58
+# 6.95  8.14  6.77  5.76
+# 7.58  8.74  12.74 7.71
+
+y1 <-c(8.04,6.95,7.58)
+y2 <-c(9.14,8.14,8.74)
+y3 <-c(7.46,6.77,12.74)
+y4 <-c(6.58,5.76,7.71)
+df<- data.frame(y1,y2,y3,y4)
+
+# Complete o código que obtém o seguinte resultado:
+
+# y1    
+# 8.04  
+# 6.95  
+# 7.58  
+
+df %>%
+select(y1)
+  
+#######################################################################
+
+# Suponha que tenhamos o dataframe df abaixo
+#
+#    x  y
+#   1  10
+#   6  8
+#   2  3
+#   4  5
+
+x <- c(1,6,2,4)
+y <- c(10,8,3,5)
+df <- data.frame(x,y)
+
+# Complete o código que obtém o seguinte resultado, fazendo uma operação
+# entre x e y
+#
+#    x  y   z
+#   1  10  -9
+#   6  8   -2
+#   2  3   -1
+#   4  5   -1
+#
+
+df %>%
+mutate(z=x-y)
+  
+########################################################################
+
+#
+# Suponha que tenhamos o dataframe df abaixo
+#
+#    city sales
+# Boston   220
+# Boston   125
+#    NYC   150
+#    NYC   250
+
+city <- c("Boston","Boston","NYC","NYC")
+sales <- c(220,125,150,250)
+df <- data.frame(city,sales)
+
+# Complete o código que obtém o seguinte resultado:
+#
+# city   avg_sales
+# Boston      172
+# NYC         200 
+
+df %>%
+  group_by(city) %>%
+  summarise(avg_sales = mean(sales))
+  
+########################################################################
+
+# Suponha que tenhamos o dataframe df abaixo
+#
+#week   min   max
+#  3    55    60
+#  2    52    56
+#  1    60    63
+#  4    65    67
+
+week <- c(3,2,1,4)
+min <- c(55,52,60,65)
+max <- c(50,56,63,67)
+df <- data.frame(week,min,max)
+# Complete o código que obtém o seguinte resultado:
+#
+#week   min   max
+#  1    60    63
+#  2    52    56
+#  3    55    60
+#  4    65    67
+
+df %>%
+arrange(week)
+
+########################################################################
+
+# Suponha que tenhamos o dataframe df abaixo
+#
+# x_b_1  x_b_2  y_c_1  y_c_2
+#  A      2      W1     25
+#  A      4      W2     21
+#  B      6      W1     26
+#  B      8      W2     30
+
+x_b_1<- c("A","A","B","B")
+x_b_2<- c(2,4,6,8)
+y_c_1<- c("W1","W2","W1","W2")
+y_c_2<- c(25,21,26,30)
+df <- data.frame(x_b_1,x_b_2,y_c_1,y_c_2)
+
+# Complete o código que obtém o seguinte resultado:
+#
+# y_c_1  y_c_2
+#  W1     25
+#  W2     21
+#  W1     26
+#  W2     30
+
+df %>%
+select(starts_with("y_c_"))
+
+#########################################################################
+
+# Suponha que tenhamos o dataframe df abaixo
+#
+# Sepal.Length Sepal.Width Petal.Length Petal.Width    Species
+# 78           6.7         3.0          5.0         1.7 versicolor
+# 121          6.9         3.2          5.7         2.3  virginica
+# 11           5.4         3.7          1.5         0.2     setosa
+# 92           6.1         3.0          4.6         1.4 versicolor
+# 146          6.7         3.0          5.2         2.3  virginica
+# 62           5.9         3.0          4.2         1.5 versicolor
+# 50           5.0         3.3          1.4         0.2     setosa
+# 17           5.4         3.9          1.3         0.4     setosa
+# 69           6.2         2.2          4.5         1.5 versicolor
+# 143          5.8         2.7          5.1         1.9  virginica
+#
+# Complete o código que obtém o seguinte resultado:
+#
+#Species      Sepal.Area
+#versicolor      20.10
+#virginica       22.08
+#setosa          19.98
+#versicolor      18.30
+#virginica       20.10
+#versicolor      17.70
+#setosa          16.50
+#setosa          21.06
+#versicolor      13.64
+#virginica      15.66
+  
+df %>%
+  mutate(Sepal.Area=Sepal.Length*Sepal.Width)%>%
+  select(Species,Sepal.Area)
+
+########################################################################
+
+# Suponha que tenhamos o dataframe df abaixo
+#
+#name         start       end         party     
+#Eisenhower   1953-01-20  1961-01-20  Republican
+#Kennedy      1961-01-20  1963-11-22  Democratic
+#Johnson      1963-11-22  1969-01-20  Democratic
+#Nixon        1969-01-20  1974-08-09  Republican
+#Ford         1974-08-09  1977-01-20  Republican
+#Carter       1977-01-20  1981-01-20  Democratic
+#Reagan       1981-01-20  1989-01-20  Republican
+#Bush         1989-01-20  1993-01-20  Republican
+#Clinton      1993-01-20  2001-01-20  Democratic
+#Bush         2001-01-20  2009-01-20  Republican
+#Obama        2009-01-20  2017-01-20  Democratic
+#
+#Crie um código abaixo para que se altere a variável party
+#deixando apenas a primeira letra dos partidos
+
+df %>%
+  mutate(party = recode(party,
+                      Republican = "R",
+                      Democratic = "D"))
+
+###############################################################################
+
+# No pacote poliscidata existe um banco de dados chamado nes, com informações 
+# do American National Election Survey. Para os exercícios a seguir, instale 
+# o pacote poliscidata e tidyverse, carregue-os e crie um objeto chamado
+# df com os dados do nes. 
+
+library(poliscidata)
+df <- nes
+
+
+
+# Faça uma primeira exploração do banco de dados com todos os comandos
+# passados até aqui que possuem esse objetivo
+glimpse(df)
+str(df)
+head (df)
+
+# Quantos respondentes possui na pesquisa?
+
+#data.frame':	5916 obs. of  399 variables
+# 5916 pessoas responderam a pesquisa
+
+# Caso queiram ter mais informações sobre as variáveis do nes, basta rodar
+# o código `?nes`, que no canto inferior direito aparecerá uma descrição.
+# Como temos muitas variáveis, deixe apenas as colunas
+# ftgr_cons, dem_raceeth, voted2012, science_use, preknow3, obama_vote
+# income5, gender.
+
+df_selecionado <-df %>%
+  select(ftgr_cons, dem_raceeth, voted2012, science_use,
+         preknow3, obama_vote,income5, gender)
+
+
+# Se quisermos ter informações apenas de pessoas que votaram na
+# eleição de 2012, podemos usar a variável voted2012. Tire do banco
+# os respondentes que não votaram
+
+df_filtrado <- df_selecionado%>%
+  filter(voted2012 == "Voted")
+
+# Quantos respondentes sobraram?
+
+str(df_filtrado)
+# sobraram 4404 respondentes
+
+# Crie uma variável chamada white que indica se o respondente é branco
+# ou não a partir da variável dem_raceeth, crie a variável ideology a
+# partir da variável ftgr_cons (0-33 como liberal, 34 a 66 como centro,
+# e 67 a 100 como conservador), ao mesmo tempo em que muda
+# a variável obama_vote para trocar o 1 por "Sim" e 2 por "não"
+
+
+df_filtrado %>%
+  mutate(ftgr_cons = 
+          case_when(ftgr_cons >= 0 & ftgr_cons < 33 ~"liberal",
+                    ftgr_cons >= 34 & ftgr_cons < 36 ~"centro",
+                    ftgr_cons >= 67 & ftgr_cons < 100 ~"conservador"))%>%
+ 
+
+
+# Demonstre como observar a quantidade de pessoas em cada uma das
+# categorias de science_use
+
+df_filtrado %>%
+  count(science_use)
+
+
+# Demonstre como observar a média de conservadorismo (variável 
+# ftgr_cons) para cada categoria de science_use
+
+df_filtrado %>%
+  group_by(science_use)%>%
+  summarise(mean(ftgr_cons,na.rm = TRUE))
+  
+  
+###############################################################################
+
+#Responder as questões teóricas da aula abaixo
+#EXERCÍCIO TEÓRICO 
+#1 - Selecione o principal artigo do campo de estudos relacionado ao seu trabalho e responda as seguintes questões: 
+#BECKER, Kalinca Leia. Como a deficiência afeta a educação e o trabalho de jovens no Brasil. 
+#Nova Economia, v. 29, n. 3, p. 1009-1039, 2019. 
+#Disponível em: https://www.scielo.br/scielo.php?script=sci_arttext&pid=S0103-63512019000301009&lang=en
+
+#a - Qual é a questão da pesquisa? 
+#Como a discriminação e as limitações das atividades causadas pela deﬁciência afetam
+#a educação e o trabalho dos indivíduos com idade entre 15 e 24 anos?
+
+#b - Qual é a teoria? 
+#Nesse sentido, Filmer (2008) analisou informações de pessoas com deﬁciência em 13 países 
+#em desenvolvimento e observou que, em média, cerca de 1 a 2% da população apresenta alguma deﬁciência. 
+#Os adultos com deﬁciência, geralmente, vivem em famílias mais pobres, porém grande parte dessa relação 
+#parece ser explicada pelo fato de que essas pessoas têm, em média, menor nível de escolaridade. Conforme evidenciado por 
+#Cunha et al. (2006), o nível educacional de um indivíduo é resultado de um processo de acúmulo de capital humano que ocorre 
+#ao longo do ciclo de vida. Dessa forma, as oportunidades de acesso à educação, qualiﬁcação e experiência proﬁssional concedidas 
+#aos jovens são essenciais para a formação do capital humano, de modo 
+#que restrições a essas oportunidades podem estar associadas à pobreza de longo prazo.No caso das pessoas com deﬁciência, 
+#a condição de saúde pode ser incorporada ao modelo através da restrição de tempo, quando as limitações causadas pela deﬁciência
+#reduzem o tempo disponível para as demais atividades, e também através da restrição orçamentária, quando a oferta de trabalho e 
+#a remuneração das pessoas com deﬁciência é menor em consequência da discriminação ou da menor produtividade imposta pelas 
+#condições de saúde (Jones et al. 2006). Vale ressaltar que a menor produtividade e o menor tempo disponível podem ser uma 
+#consequência especíﬁca da deﬁciência, mas também podem estar relacionados a indisponibilidade de infraestrutura, serviços e 
+#recursos adequados. Dessa forma, os jovens com deﬁciência enfrentariam restrições adicionais de participação na sociedade, 
+#em desacordo com o ideal de igualdades de condições, estabelecido pela ONU (Brasil, 2009).
+
+#c - Qual é o desenho de pesquisa? 
+#Dessa forma, foram estimadas as probabilidades de o jovem estudar/trabalhar/procurar 
+#emprego através de um modelo logit multinomial. Os dados são da Pesquisa Nacional de Saúde (PNS) de 2013,
+#que permite identiﬁcar as pessoas com deﬁciência intelectual, física, auditiva e visual e se essa condição causa 
+#limitações das atividades habituais.
+
+#d - Como o artigo se sai nos 4 quesitos de avaliação de causalidade? 
+#1 Existe uma argumentação razoável para X causar Y? 
+#Sim, de acordo com o artigo os jovens com deﬁciência enfrentariam restrições adicionais de participação na sociedade, 
+#em desacordo com o ideal de igualdades de condições. Portanto as limitações causadas pela deficiência afetam o trabalho 
+#e a escolaridade das pessoas. 
+#2 Podemos descartar a chance de Y causar X? 
+#No caso do artigo sim, ao menos que se leve em conta um trabalho de risco que cause um acidente e provoque uma deficiência adquirida. 
+#3 Existe covariação entre X e Y? - análise empírica que mostre a associação entre as variáveis
+#4 Foi levado em consideração outras variáveis Z que podem fazer a associação entre X e Y desaparecer? - 
+variável confounding correlacionada com a variável dependente e independente
+
+#e – O que ele conclui? 
+
+#f - Como a sua pesquisa dá um passo a mais para o desenvolvimento teórico presente neste artigo?
+#Minha pesquisa inclui a variável Renda na investigação. 
+
+#2 - Elabore qual é a pergunta da sua pesquisa em apenas uma frase
+#A deficiência (física, auditiva, intelectual e visual) afeta a renda das pessoas com deficiência? 
+
+#3 - Pense no seu trabalho e avalie em que medida ele passa pelas 4 avaliações de relação causal,
+e quais problemas ele pode ter em cada uma delas.
+#1 Existe uma argumentação razoável para X causar Y? 
+#Sim, da mesma forma que na teoria apresentada no artigo, as limitações causadas pela deficiência impactam no nível de escolaridade e 
+#trabalho, o que por sua vez impacta na renda. 
+#2 Podemos descartar a chance de Y causar X? 
+#Se for considerada a renda da família é possível que a renda cause a deficiência, 
+#se for uma deficiência adquirida através de trabalhos perigosos por pessoas de classes sociais mais baixas, 
+#ou uma deficiência congênita causada por doenças que tenham como determinantes sociais a pobreza.
+#3 Existe covariação entre X e Y? 
+#4 Foi levado em consideração outras variáveis Z que podem fazer a associação entre 
+#X e Y desaparecer? 
+
+
