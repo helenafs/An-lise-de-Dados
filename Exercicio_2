@@ -320,7 +320,11 @@ df_filtrado %>%
 
 #c - Qual é o desenho de pesquisa? 
 #Dessa forma, foram estimadas as probabilidades de o jovem estudar/trabalhar/procurar 
-#emprego através de um modelo logit multinomial. Os dados são da Pesquisa Nacional de Saúde (PNS) de 2013,
+#emprego através de um modelo logit multinomialcom seis categorias exaustivas e mutuamente exclusivas: 
+#(a) Não estuda, não trabalha e não procura emprego (NE NT NP); (b) Não estuda, não trabalha e procura emprego (NE NT P); 
+#(c) Estuda, não trabalha e procura emprego (E NT P; 
+#(d) Estuda, não trabalha e não procura emprego (E NT NP); (e) Não estuda e trabalha (NE T); 
+#(f) Estuda e trabalha (E T). Os dados são da Pesquisa Nacional de Saúde (PNS) de 2013,
 #que permite identiﬁcar as pessoas com deﬁciência intelectual, física, auditiva e visual e se essa condição causa 
 #limitações das atividades habituais.
 
