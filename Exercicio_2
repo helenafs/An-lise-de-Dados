@@ -237,7 +237,7 @@ str(df_filtrado)
 
 df_filtrado%>%
   mutate(white = (dem_raceeth == "1. White non-Hispanic")) %>%
-  mutate(ftgr_cons = 
+  mutate(ideology = 
           case_when(ftgr_cons >= 0 & ftgr_cons < 33 ~"liberal",
                     ftgr_cons >= 34 & ftgr_cons < 36 ~"centro",
                     ftgr_cons >= 67 & ftgr_cons < 100 ~"conservador"))%>%
