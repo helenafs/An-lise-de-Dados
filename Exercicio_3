@@ -1,0 +1,279 @@
+# Utilizando o banco world do pacote poliscidata, faça um  
+# histograma que também indique a média e um boxplot 
+# da variável gini10
+# Descreva o que você pode observar a partir deles.
+
+library(tidyverse)
+library(poliscidata)
+banco <- world
+
+ggplot(banco, aes(gini10)) +
+  geom_histogram (binwidth = 0.7)+
+  geom_vline(aes(xintercept = mean(gini10, na.rm = T)))
+
+
+#O histograma é a distribuição gráfica de frequência da variável. 
+#No caso do histograma do gini10, ele demonstra que a média da frequência
+#do índice de gini é um pouco acima de 40.De acordo com o gráfico é possível notar que existem
+#mais países com índice de gini menor que 40, o que indica que mais países 
+#são menos desiguais, pois quanto mais perto de zero (0), menor o índice de
+#desigualdade do país. 
+
+ggplot(banco, aes(x = "", y = gini10)) +
+  geom_boxplot ()
+
+
+#O boxplot representa a distribuição e os valores discrepantes dos dados. 
+#O valor na posição do primeiro quartio está entre 30 e 35, mais próximo de 35. 
+#A mediana está um pouco abaixo de 40 e o terceiro quartio fica entre 45 e 50,
+#mais próximo de 50, ou seja, 75% dos países possui um índice de gini abaixo
+#desse valor. 
+
+
+# Utilizando as funções de manipulação de dados da aula passada,
+# faça uma tabela que sumarize a media (função mean), 
+# mediana (funcao median) e o desvio padrão (fundao sd) da 
+# renda per capta (variável gdppcap08), agrupada por tipo de regime 
+# (variável democ).
+# Explique a diferença entre valores das médias e medianas.
+# Ilustre com a explicação com gráfico de boxplot.
+# Os dados corroboram a hipótese da relação entre democracia
+# e desempenho economico?
+
+banco %>%
+  group_by(democ) %>%
+  summarise(media = mean(gdppcap08, na.rm = TRUE), 
+            mediana = median(gdppcap08, na.rm = TRUE), 
+            desvio_padrao = sd (gdppcap08, na.rm = TRUE))
+
+#A média é calculada através da soma do valor de todas as observações, 
+#divida pela quantidade de observações. Já a mediana é o valor que se encontra na 
+#posição do meio das observações, ou seja, metade das observações tem um valor menor 
+#que a mediana e a outra metade tem um valor maior que a mediana. 
+# Para os países que não são democracias: média de renda percapta é 9243,
+#e a mediana 4388.
+#Para os países que são democracias: média de renda percapta é: 16351,
+#e a mediana 11660. 
+
+ggplot(banco, aes(x = "", y = gdppcap08)) +
+  geom_boxplot ()
+
+#Os dados corroboram a hipótese da relação entre democracia e desempenho economico.
+#Os países que são democracias possuem rendas per captas maiores. 
+
+
+# Carregue o banco states que está no pacote poliscidata 
+# Mantenha apenas as variáveis obama2012, conpct_m, hs_or_more,
+# prcapinc, blkpct10, south, religiosity3, state
+
+banco_2 <- states %>%
+  select(state, obama2012, conpct_m, hs_or_more,
+        prcapinc, blkpct10, south, religiosity3)
+
+
+# Carregue o banco nes que está no pacote poliscidata
+# Mantenha apenas as variáveis obama_vote, ftgr_cons, dem_educ3,
+# income5, black, south, relig_imp, sample_state
+
+banco_3 <- nes %>%
+  select (sample_state, obama_vote, ftgr_cons, dem_educ3,
+          income5, black, south, relig_imp)
+
+# As variáveis medem os mesmos conceitos, voto no obama em 2012, 
+# conservadorismo, educação, renda, cor, norte-sul, 
+# religiosidade e estado. A diferença é que o nes é um banco de
+# dados com surveys individuais e o states é um banco de dados
+# com informações por estado
+#
+# Faça um gráfico para cada banco representando o nível de
+# conservadorismo. Comente as conclusões que podemos ter
+# a partir deles sobre o perfil do eleitorado estadunidense.
+# Para ajudar, vocês podem ter mais informações sobre os bancos
+# de dados digitando ?states e ?nes, para ter uma descrição das
+# variáveis
+
+?states
+#variável conpct_m = Percent mass public Conservative
+
+ggplot(banco_2, aes("",conpct_m))+
+  geom_boxplot()
+
+#No caso do banco states a variável que mede conservadorismo é 
+#uma variável numérica contínua.De acordo com o boxplot dessa variável
+#75% dos estados possuem menos de 40% da sua população sendo conservadora.
+#50% dos estados possuem menos de 35% da sua população sendo conservadora. 
+
+
+?nes
+#variável ftgr_cons = Feeling thermometer: Conservatives
+
+ggplot(banco_3, aes(ftgr_cons))+
+  geom_histogram(binwidth = 5)+
+  geom_vline(aes(xintercept = median(ftgr_cons, na.rm = T)))
+
+#No caso do banco nes a variável que mede conservadorismo é
+#numérica discreta. 50% dos respondentes do survey possuem um grau de
+#conservadorismo abaixo de 50. E a maior concentração de respondentes fica
+#em torno do grau de conservadorismo 50. 
+
+
+# Qual é o tipo de gráfico apropriado para descrever a variável
+# de voto em obama nos dois bancos de dados?
+# Justifique e elabore os gráficos
+
+#No banco states a variável obama2012 indica o percentual de votos que Obama
+#recebeu em cada estado. No banco nes a variável obama_vote indica quais dos respondentes
+#votaram em Obama (1) ou não (0).Sendo assim a variável obama2012 (states) é numérica
+#contínua, pode ser representada por um histograma, boxplot, curva de densidade.
+#Já a variável obama_vote é categórica, pode ser representada através de um gráfico de
+#barras. 
+
+ggplot(banco_2, aes(obama2012))+
+  geom_histogram(aes(y=..density..),      
+                 binwidth=1) +
+  geom_density()
+
+
+ggplot(banco_3, aes(obama_vote))+
+  geom_bar()
+
+
+# Crie dois bancos de dados a partir do banco nes, um apenas com
+# respondentes negros e outro com não-negros. A partir disso, faça
+# dois gráficos com a proporção de votos no obama.
+# O que você pode afirmar a partir dos gráficos?
+# Você diria que existe uma relação entre voto em Obama e cor?
+
+
+?nes
+banco_negro <- nes%>%
+  filter(black == "Yes")
+
+ggplot(banco_negro, aes(obama_vote))+
+  geom_bar()
+
+banco_nnegro <- nes%>%
+  filter(black == "No")
+
+ggplot(banco_nnegro, aes(obama_vote))+
+  geom_bar()
+
+#No banco de negros de 1016 respondentes perto de 800 votaram em Obama.
+#No banco com não negros a quantidade de respondentes que votaram em Obama 
+#é bem próxima das pessoas que não votaram em Obama, no entanto Obama 
+#ainda sim ganhou mais votos. 
+#Eu diria que não existe uma relação entre voto em Obama e cor.  
+
+
+# A partir do banco de dados states, faça uma comparação semelhante.
+# Faça um gráfico com as porcentagens de votos em Obama para estados
+# que estão acima da mediana da porcentagem de população negra nos estados,
+# e outro gráfico com as porcentagens de votos em Obama para os estados
+# que estão abaixo da mediana de população negra.
+# O que você pode afirmar a partir dos gráficos?
+# Podemos chegar a mesma conclusão anterior?
+
+?states
+#blkpct10
+#Percent black (2010)
+
+states %>%
+  summarise (mediana = median(blkpct10, na.rm = TRUE), 
+            minimo = min(blkpct10, na.rm = TRUE),
+            maximo = max(blkpct10, na.rm = TRUE)) 
+# descobrir a mediana, o valor mínimo e o máximo
+
+banco_4 <- states%>%
+  mutate(blkpct10 = case_when(blkpct10>= 8.25 & blkpct10 <= 37.7 ~ "acima mediana",
+                              blkpct10>= 0.8 & blkpct10 <= 8.25 ~ "abaixo mediana"))
+
+#classificar cada linha se está acima ou abaixo da mediana
+
+acima_mediana <- banco_4%>%
+  filter(blkpct10 == "acima mediana")
+
+abaixo_mediana <- banco_4%>%
+  filter(blkpct10 == "abaixo mediana")
+
+#fazer os dois bancos separados para os estados que estão acima ou abaixo da mediana
+
+ggplot(acima_mediana, aes("",obama2012))+
+  geom_boxplot()
+           
+
+ggplot(abaixo_mediana, aes("",obama2012))+
+  geom_boxplot()
+
+
+#para os estados que estão acima da mediana da população negra em 2010,
+#que tem uma população maior de negros os votos em obama ficaram abaixo de 
+#50% em  metade dos estados. Para os estados que estão abaixo da mediana 
+#da população negra em 2010, que tem uma população menor de negros,
+#a votação em Obama ficou abaixo dos 55% em metade dos estados.
+#Podemos chegar a mesma conclusão anterior,não existe relação entre voto em obama e cor. 
+
+
+
+# A partir da varíavel X do banco df abaixo
+df <- data.frame(x = cos(seq(-50,50,0.5)))
+# Faça os tipos de gráficos que representem esse tipo de variável
+# comentando as diferenças entre elas e qual seria a mais adequada
+
+
+ggplot(df, aes(x)) + 
+  geom_histogram(aes(y=..density..),      
+                 bins=35) +
+  geom_density()
+
+ggplot(df, aes("",x))+
+  geom_boxplot()
+
+ggplot(df, aes("",x)) + 
+  geom_violin(draw_quantiles = c(0.25, 0.5, 0.75))
+
+install.packages("ggbeeswarm")
+library (ggbeeswarm)
+
+ggplot(df, aes("",x)) +
+  geom_beeswarm()
+
+#A varíavel x é contínua e pode ser representada através de histograma,
+#boxplot, curva de desidade, violinplot e um gráfico de pontos.
+#Primeiro fiz um histograma com a curva de densidade. O histograma 
+#é a distribuição gráfica de frequência da variável, já a curva de densidade usa
+#uma linha curva para descrever a distribuição dos dados ao longo 
+#de seus valores.
+#Em segundo, fiz um boxplot. O boxplotepresentar a variação de dados 
+#observados de uma variável numérica por meio de quartis (posições dos dados
+#na distribuição da variável).
+#Em terceiro, fiz um violinplot. Esse gráfico mostra como os dados
+#estão distribuídos.Através das especificações é possível 
+#juntar no violinplot as informações do boxplot e da curva 
+#de distribuição dos dados. 
+#Por último, fiz um gráfico de pontos.Nele a concentração dos pontos 
+#em seus valores correspondentes mostra a distribuição dos dados.  
+#Os quatro gráficos demonstram que os dados dessa variável se concentram 
+#nos extremos.No caso dessa variável acredito que o histograma com a 
+#curva de densidade apresente mais dados, pois mostra a frequência de dados em 
+#cada bin com o histograma e a curva de densidade mostra como os dados
+#estão distribuídos. 
+
+# Responda as questões teóricas abaixo
+
+#Exercício Teórico 
+#1 - Observar a figura 1.2 do livro Fundamentals of Political 
+#Research e fazer o mesmo esquema para o trabalho final de vocês.
+
+#2 - Qual é a disponibilidade de dados para sua pesquisa? 
+#Já existem bancos de dados prontos? Você tem acesso a eles? 
+#Caso a última pergunta seja positiva, responda o exerício 4 do 
+#capítulo 5.
+
+#O IBGE coletou esses dados na Pesquisa Nacional de Saúde de 2013, é
+#possível baixar os dados pelo site do IBGE. 
+
+#3 - A partir dos exercícios anteriores, escreva sobre a 
+#confiabilidade e validade de suas variáveis.
+
+#4 - Qual seria a forma ideal e mais adequada de operacionalizar
+#suas variáveis para testar sua hipótese?
