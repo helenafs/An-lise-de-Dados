@@ -299,11 +299,25 @@ ggplot(df, aes("",x)) +
 
 #(c) Parece um método confiável para operacionalizar essa variável? Como a confiabilidade 
 #essa operacionalização pode ser melhorada? 
+#Sim, é um método confiável. O IBGE calcula as amostras com base em dados de domicílios
+#de todo o país utilizando o Cadastro Nacional de Endereços para Fins Estatísticos – CNEFE. 
+#Um repositório de endereços de abrangência nacional criado, em 2005, a partir da sistematização
+#dos dados coletados pelo Censo Demográfico 2000. Este Cadastro contempla informações sobre 
+#domicílios e estabelecimentos de todo o País. A cada Censo Demográfico, ele é totalmente revisto
+#e passa por um processo contínuo de atualizações pontuais. 
+
 #(d) Avalie os vários elementos da validade para esta operacionalização variável. 
 #Como a validade dessa operacionalização pode ser melhorada?
+#A validade das medidas no caso do IBGE é garantida através de um extenso 
+#treinamento feito com os agentes de coleta de dados, garantindo que todos 
+#coletarão as informações pretendidas. Além disso os dados são avaliados por 
+#um sistema de computador que aponta se existem erros em relação às respostas, através 
+#desse sistema o agente de coleta precisa modificar as respostas ou justificar o erro 
+#antes que o questionário seja enviado para análise estatística.
 
 #3 - A partir dos exercícios anteriores, escreva sobre a 
 #confiabilidade e validade de suas variáveis.
+#Ver questões 2 (c) e (d). 
 
 #4 - Qual seria a forma ideal e mais adequada de operacionalizar
 #suas variáveis para testar sua hipótese?
