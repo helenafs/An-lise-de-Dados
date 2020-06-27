@@ -264,6 +264,15 @@ ggplot(df, aes("",x)) +
 #1 - Observar a figura 1.2 do livro Fundamentals of Political 
 #Research e fazer o mesmo esquema para o trabalho final de vocês.
 
+#Variável independente (deficiência – física, auditiva, visual, intelectual) 
+# Variável dependente (renda)  Variável dependente (Coeficiente de variação das
+#estimativas de rendimento mensal médio habitual de todos os trabalhos de pessoas de 
+#14 anos ou mais de idade)  hipótese: a existência de uma deficiência afeta a renda 
+# Variável independente (deficiência intelectual, isto é, desenvolvimento intelectual
+#abaixo do normal, deficiência auditiva permanente, isto é, perda parcial ou total das 
+#possibilidades de ouvir, deficiência visual permanente, isto é, perda parcial ou total das 
+#possibilidades de ver, deficiência física, isto é, perda parcial ou total das possibilidades de locomoção).
+
 #2 - Qual é a disponibilidade de dados para sua pesquisa? 
 #Já existem bancos de dados prontos? Você tem acesso a eles? 
 #Caso a última pergunta seja positiva, responda o exerício 4 do 
@@ -271,6 +280,19 @@ ggplot(df, aes("",x)) +
 
 #O IBGE coletou esses dados na Pesquisa Nacional de Saúde de 2013, é
 #possível baixar os dados pelo site do IBGE. 
+
+#(a) Descreva o conjunto de dados e a finalidade para a qual foi montado.
+#A Pesquisa Nacional de Saúde - PNS visou coletar informações sobre o desempenho 
+#do sistema nacional de saúde no que se refere ao acesso e uso dos serviços disponíveis 
+#e à continuidade dos cuidados, bem como sobre as condições de saúde da população, a vigilância 
+#de doenças crônicas não transmissíveis e os fatores de risco a elas associados.
+
+#(b) Quais são as dimensões de tempo e espaço do conjunto de dados? Leia os detalhes
+#de como uma das variáveis em que você está interessado foi codificada.  
+#(c) Parece um método confiável para operacionalizar essa variável? Como a confiabilidade 
+#essa operacionalização pode ser melhorada? 
+#(d) Avalie os vários elementos da validade para esta operacionalização variável. 
+#Como a validade dessa operacionalização pode ser melhorada?
 
 #3 - A partir dos exercícios anteriores, escreva sobre a 
 #confiabilidade e validade de suas variáveis.
