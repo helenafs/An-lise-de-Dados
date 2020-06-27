@@ -282,6 +282,10 @@ ggplot(df, aes("",x)) +
 #possível baixar os dados pelo site do IBGE. 
 
 #(a) Descreva o conjunto de dados e a finalidade para a qual foi montado.
+#A pesquisa é realizada por uma amostra probabilística de domicílios. As informações 
+#são prestadas por pessoa moradora, considerada apta a prestar informação para o conjunto
+#de moradores e pelo domicílio. O entrevistador está orientado a não aceitar como informante 
+#uma pessoa menor de 14 anos de idade.
 #A Pesquisa Nacional de Saúde - PNS visou coletar informações sobre o desempenho 
 #do sistema nacional de saúde no que se refere ao acesso e uso dos serviços disponíveis 
 #e à continuidade dos cuidados, bem como sobre as condições de saúde da população, a vigilância 
@@ -289,6 +293,10 @@ ggplot(df, aes("",x)) +
 
 #(b) Quais são as dimensões de tempo e espaço do conjunto de dados? Leia os detalhes
 #de como uma das variáveis em que você está interessado foi codificada.  
+#Espaço: Pesquisa domiciliar de saúde com a população residente nos domicílios particulares 
+#(permanentes e improvisados), nas áreas urbana e rural. Tempo: Data - 27/07/2013; 
+#Semana - 21/07/2013 a 27/07/2013; Mês - 01/07/2013 a 31/07/2013; Mês - 28/06/2013 a 27/07/2013. 
+
 #(c) Parece um método confiável para operacionalizar essa variável? Como a confiabilidade 
 #essa operacionalização pode ser melhorada? 
 #(d) Avalie os vários elementos da validade para esta operacionalização variável. 
