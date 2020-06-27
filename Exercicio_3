@@ -321,3 +321,7 @@ ggplot(df, aes("",x)) +
 
 #4 - Qual seria a forma ideal e mais adequada de operacionalizar
 #suas variáveis para testar sua hipótese?
+#Na operacionalização da variável sobre deficiência poderiam ser inclusas questões sobre
+#exames médicos, de uma forma que a deficiência fosse medida de acordo com o modelo
+#“biológico-psíquico-social”, que compreende funcionalidade e deficiência como uma interação 
+#dinâmica entre problemas de saúde e fatores contextuais, tanto pessoais quanto ambientais. 
