@@ -1,0 +1,256 @@
+---
+title: "Exercicio 5"
+author: "Helena Santos"
+output: github_document
+---
+
+```{r setup, include=FALSE, warning=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+### Carregue o banco de dados `world` que está no pacote `poliscidata`.
+
+```{r}
+library(poliscidata)
+library(tidyverse)
+
+banco <- world
+
+```
+
+### Existem diversas medidas de democracia para os países: `dem_score14`, `democ11`, `fhrate04_rev`, `fhrate08_rev`, `polity`. Descreva-as graficamente e diga quais são as diferenças entre tais medidas.
+ 
+ ```{r}
+?world 
+banco$dem_score14
+banco$democ11
+banco$fhrate04_rev
+banco$fhrate08_rev
+banco$polity
+
+ggplot(banco, aes("",dem_score14)) +
+  geom_boxplot()
+  
+ggplot(banco, aes("",democ11)) +
+  geom_boxplot()
+  
+ggplot(banco, aes ("",fhrate04_rev))+
+  geom_boxplot()
+  
+ggplot(banco, aes ("",fhrate08_rev))+
+   geom_boxplot()
+  
+ggplot(banco, aes ("",polity))+
+ geom_boxplot()
+  
+ ```
+ 
+### Resposta: As variáveis democ11, fhrate08_rev, polity, dem_score14 e fhrate04_rev, podem ser classificadas como contínuas, pois mesmo que representando graus de democracia elas têm valores numéricos na sua classificação. A variável democ11 mostra o Democracy score, 2011 (UN)e varia de 0 a 10. A variável fhrate08_rev representa o Freedom House 1-7 scale reversed, rescaled 0-12, e vai de 0 a 12 sendo cada número uma categora difernte de democracia. A variável polity representa scores de democracia, quanto mais alto o score mais democrático é o país, variando de scores negativos a positivos. Já as variáveis dem_score14 e fhrate04_rev possuem valores fracionados. 
+
+### Avalie a relação entre todas as medidas de democracia e desigualdade, utilizando a variável `gini08`. Descreva graficamente esta variável, a relação entre as duas variáveis, meça a correlação entre elas e faça regressões lineares (interpretando em profundidade os resultados dos coeficientes e medidas de desempenho dos modelos). Enfatize as semelhanças e diferenças entre os resultados. Quais são suas conclusões?
+
+```{r}
+banco$gini08
+ 
+ggplot(banco, aes("",y = gini08)) + 
+  geom_boxplot()
+  
+ggplot(banco, aes(gini08,dem_score14)) +
+ geom_point()+
+ geom_smooth(method = "lm")
+
+cor.test(banco$gini08, banco$dem_score14) 
+
+regressao1 <- lm(dem_score14 ~ gini08, data = banco)
+summary (regressao1)
+
+ggplot(banco, aes(gini08, democ11)) +
+ geom_point()+
+ geom_smooth(method = "lm")
+ 
+cor.test(banco$gini08, banco$democ11)
+ 
+regressao2 <- lm(democ11 ~ gini08, data = banco)
+summary (regressao2)
+
+ggplot(banco, aes(gini08, fhrate04_rev)) +
+ geom_point()+
+ geom_smooth(method = "lm")
+ 
+cor.test(banco$gini08, banco$fhrate04_rev)
+ 
+regressao3 <- lm(fhrate04_rev ~ gini08, data = banco)
+summary (regressao3)
+
+ggplot(banco, aes(gini08, fhrate08_rev)) +
+ geom_point()+
+ geom_smooth(method = "lm")
+
+cor.test(banco$gini08, banco$fhrate08_rev) 
+ 
+regressao4 <- lm(fhrate08_rev ~ gini08, data = banco)
+summary (regressao4)
+
+ggplot(banco, aes(gini08, polity)) +
+ geom_point()+
+ geom_smooth(method = "lm")
+
+cor.test(banco$gini08, banco$polity) 
+
+regressao5 <- lm(polity ~ gini08, data = banco)
+summary(regressao5)
+ 
+```
+### Resposta (gini08): A relação entre as variáveis que classificam a democracia e o Índice de Gini é negativa, ou seja, quanto menor o Índice de Gini, maior é o grau de democracia. O que faz bastante sentido, levando em conta que o Índice de Gini indica que quanto mais próximo de 0 mais igual é o país e, portanto, a situação é melhor. De acordo com os cinco modelos de regressão o que melhor explica a variação na democracia, levando em conta o R2, é o modelo que compara o Índice de Gini e dem_score14. 
+* Correlação entre Índice de Gini e dem_score14: existe uma correlação negativa significativa entre o Índice de Gini e dem_score14 com base num p-valor de 0,05. No resultado dessa correlação com o p-valor = 0,01523, e com um intervalo de confiança de 95% de resultado = -0,38215203 a -0,04321115, é possível rejeitar a hipótese nula de que a correlação é igual a 0. Regressão entre Índice de Gini e dem_score14: nesse resultado o valor de dem_score14 quando o Índice de Gini for igual a 0 é 7,71756 (*intercept*), já o valor estimado para que dem_score14 varie quando o Índice de Gini for igual a 1 é -0,04448, de acordo com os p-valores é possível considerar esses coeficientes significantes. De acordo com o *residual standard error* (RMSE) a distância média entre os valores observados e os valores estimados do *intercept* e do Índice de Gini é de 2,003. De acordo com o R2 esse modelo explica apenas 4% do total de variação em dem_score14. 
+* Correlação entre Índice de Gini e democ11: de acordo com o resultado não é possível detectar a correlação entre o Índice de Gini e dem_score14, com o p-valor do resultado = 0,3677. Nesse resultado é ainda mais difícil rejeitar a hipótese nula que no resultado anterior, levando em conta o intervalo de confiança de 95% de resultado = -0,26378781 a 0,09988899. Regressão entre Índice de Gini e democ11: o *intercept* é 7,68568 e o coeficiente de inclinação da regressão é -0,02994. Porém, apenas o valor do *intercept* é estatisticamente significante, o valor da inclinação não. O RMSE é igual a 3,47 e esse modelo explica apenas 0,7% da variação em democ11.
+* Correlação entre Índice de Gini e fhrate04_rev: existe uma correlação negativa significativa entre o Índice de Gini e fhrate04_rev com base num p-valor de 0,05. No resultado dessa correlação o p-valor = 0,04921, e com um intervalo de confiança de 95%  de resultado = -0,3452745300 a -0,0007294745, é possível rejeitar a hipótese nula de que a correlação é igual a 0. Regressão entre Índice de Gini e fhrate04_rev: o *intercept* é 6,13654 e o coeficiente de inclinação da regressão é -0,03199, de acordo com os p-valores ambos os coeficientes são estatisticamente significantes. O RMSE é igual a 1,786 e esse modelo explica apenas 3% da variação em fhrate04_rev. 
+* Correlação entre Índice de Gini e fhrate08_rev: de acordo com o resultado não é possível detectar a correlação entre o Índice de Gini e fhrate08_rev, com o p-valor do resultado = 0,08387. Com um intervalo de 95% de resultado -0,32708386 a 0,02129614, não é possível rejeitar a hipótese nula de que a correlação é igual a 0. Regressão entre Índice de Gini e fhrate08_rev: o *intercept* é 9,97288 e o coeficiente de inclinação da regressão é -0,05590. De acordo com os p-valores ambos apenas o *intercept* é estatisticamente significante. O RMSE é igual a 3,554 e esse modelo explica apenas 2% da variação em fhrate08_rev. 
+* Correlação entre Índice de Gini e polity, com um p-valor de 0,665 não é possível detectar a correlação entre o Índice de Gini e polity. Com um intervalo de confiança de 95% de resultado = -0,2222590 a 0,1433725, não é possível rejeitar a hipótese nula de que a correlação é igual a 0. Regressão entre Índice de Gini e polity: o *intercept* é 6,21813, o coeficiente de inclinação da regressão é -0,02292. Porém, apenas o valor do *intercept* é estatisticamente significante, o valor da inclinação não. O RMSE é igual a 5,535 e esse modelo explica apenas 0,16% da variação em polity. 
+ 
+
+### Avalie a relação entre todas as medidas de democracia e crescimento econômico, utilizando a variável `gdppcap08`. Descreva graficamente esta variável, a relação entre as duas variáveis, meça a correlação entre elas e faça regressões lineares (interpretando em profundidade os resultados dos coeficientes e medidas de desempenho dos modelos). Enfatize as semelhanças e diferenças entre os resultados. Quais são suas conclusões?
+
+```{r}
+banco$gdppcap08
+ 
+ggplot(banco, aes("",y = gdppcap08)) + 
+  geom_boxplot()
+  
+ggplot(banco, aes(gdppcap08,dem_score14)) +
+ geom_point()+
+ geom_smooth(method = "lm")
+
+cor.test(banco$gdppcap08, banco$dem_score14) 
+
+regressao6 <- lm(dem_score14 ~ gdppcap08, data = banco)
+summary (regressao6)
+
+ggplot(banco, aes(gdppcap08, democ11)) +
+ geom_point()+
+ geom_smooth(method = "lm")
+ 
+cor.test(banco$gdppcap08, banco$democ11)
+ 
+regressao7 <- lm(democ11 ~ gdppcap08, data = banco)
+summary (regressao7)
+
+ggplot(banco, aes(gdppcap08, fhrate04_rev)) +
+ geom_point()+
+ geom_smooth(method = "lm")
+ 
+cor.test(banco$gdppcap08, banco$fhrate04_rev)
+ 
+regressao8 <- lm(fhrate04_rev ~ gdppcap08, data = banco)
+summary (regressao8)
+
+ggplot(banco, aes(gdppcap08, fhrate08_rev)) +
+ geom_point()+
+ geom_smooth(method = "lm")
+
+cor.test(banco$gdppcap08, banco$fhrate08_rev) 
+ 
+regressao9 <- lm(fhrate08_rev ~ gdppcap08, data = banco)
+summary (regressao9)
+
+ggplot(banco, aes(gdppcap08, polity)) +
+ geom_point()+
+ geom_smooth(method = "lm")
+
+cor.test(banco$gdppcap08, banco$polity) 
+
+regressao10 <- lm(polity ~ gdppcap08, data = banco)
+summary(regressao10)
+ 
+```
+### Resposta (gdppcap08): A relação entre as variáveis que classificam a democracia e o crescimento econômico é positiva, ou seja, quanto maior o gdppcap08, maior é o grau de democracia. De acordo com os cinco modelos de regressão o que melhor explica a variação na democracia, levando em conta o R2, é o modelo que compara o gdppcap08 e dem_score14. 
+* Correlação entre gdppcap08 e dem_score14: existe uma correlação positiva significativa entre gdppcap08 e dem_score14. No resultado dessa correlação com o p-valor = 3,159e-11, e com um intervalo de confiança de 95% de resultado = 0,3763618 a 0,6150148 é possível rejeitar a hipótese nula. Regressão entre gdppcap08 e dem_score14: o *intercept* é 4,678e+00 e o coeficiente de inclinação da regressão é 7,040e-05. De acordo com o p-valores ambos os coeficientes são estatisticamente significantes. O RMSE é igual a 1,864 e esse modelo explica 25% da variação em dem_score14.
+* Correlação entre gdppcap08 e democ11: existe uma correlação positiva significativa entre gdppcap08 e democ11. No resultado dessa correlação com o p-valor = 0,000435, e com um intervalo de confiança de 95% de resultado = 0,1330147 a 0,4351981 é possível rejeitar a hipótese nula. Regressão entre gdppcap08 e democ11: o *intercept* é 4.939e+00 e o coeficiente de inclinação da regressão é 7.359e-05. De acordo com o p-valores ambos os coeficientes são estatisticamente significantes. O RMSE é igual a 3,57 e esse modelo explica 8% da variação em democ11. 
+* Correlação entre gdppcap08 e fhrate04_rev: No resultado dessa correlação com o p-valor = 1,331e-08, e com um intervalo de confiança de 95% de resultado = 0,3027442 a 0,5605748 é possível rejeitar a hipótese nula. Regressão entre gdppcap08 e fhrate04_rev: o *intercept* é 3,828e+00 e o coeficiente de inclinação da regressão é 5,545e-05. De acordo com o p-valores ambos os coeficientes são estatisticamente significantes. O RMSE é igual a 1.751 e esse modelo explica 19% da variação em fhrate04_rev. 
+* Correlação entre gdppcap08 e fhrate08_rev: No resultado dessa correlação com o p-valor = 1,115e-08, e com um intervalo de confiança de 95% de resultado = 0,3061176 a 0,5638582 é possível rejeitar a hipótese nula. Regressão entre gdppcap08 e fhrate08_rev: o *intercept* é 5,698e+00 e o coeficiente de inclinação da regressão é 1.098e-04. De acordo com o p-valores ambos os coeficientes são estatisticamente significantes. O RMSE é igual a 3,438 e esse modelo explica 19% da variação em fhrate08_rev. 
+* Correlação entre gdppcap08 e polity: No resultado dessa correlação com o p-valor = 0,04392, e com um intervalo de confiança de 95% de resultado = 0,004758504 a 0,325013386 é possível rejeitar a hipótese nula. Regressão entre gdppcap08 e polity: o *intercept* é 3,375e+00 e o coeficiente de inclinação da regressão é 7,047e-05. De acordo com o p-valores ambos os coeficientes são estatisticamente significantes. O RMSE é igual a 6,059 e esse modelo explica 2% da variação em polity.
+
+### Avalie a relação entre todas as medidas de democracia e produção de petróleo, utilizando a variável `oil`. Descreva graficamente esta variável, a relação entre as duas variáveis, meça a correlação entre elas e faça regressões lineares (interpretando em profundidade os resultados dos coeficientes e medidas de desempenho dos modelos). Enfatize as semelhanças e diferenças entre os resultados. Quais são suas conclusões?
+
+```{r}
+banco$oil
+ 
+ggplot(banco, aes(oil)) + 
+  geom_histogram(bins=25)
+  
+ggplot(banco, aes(oil,dem_score14)) +
+ geom_point()+
+ geom_smooth(method = "lm")
+
+cor.test(banco$oil, banco$dem_score14) 
+
+regressao11 <- lm(dem_score14 ~ oil, data = banco)
+summary (regressao11)
+
+ggplot(banco, aes(oil, democ11)) +
+ geom_point()+
+ geom_smooth(method = "lm")
+ 
+cor.test(banco$oil, banco$democ11)
+ 
+regressao12 <- lm(democ11 ~ oil, data = banco)
+summary (regressao12)
+
+ggplot(banco, aes(oil, fhrate04_rev)) +
+ geom_point()+
+ geom_smooth(method = "lm")
+ 
+cor.test(banco$oil, banco$fhrate04_rev)
+ 
+regressao13 <- lm(fhrate04_rev ~ oil, data = banco)
+summary (regressao13)
+
+ggplot(banco, aes(oil, fhrate08_rev)) +
+ geom_point()+
+ geom_smooth(method = "lm")
+
+cor.test(banco$oil, banco$fhrate08_rev) 
+ 
+regressao14 <- lm(fhrate08_rev ~ oil, data = banco)
+summary (regressao14)
+
+ggplot(banco, aes(oil, polity)) +
+ geom_point()+
+ geom_smooth(method = "lm")
+
+cor.test(banco$oil, banco$polity) 
+
+regressao15 <- lm(polity ~ oil, data = banco)
+summary(regressao15)
+
+```
+
+### Resposta(oil): A relação entre as variáveis que classificam a democracia e a produção de petróleo é negativa, ou seja, quanto menor a produção de petróleo, maior é o grau de democracia. De acordo com os cinco modelos de regressão o que melhor explica a variação na democracia, levando em conta o R2, é o modelo que compara o oil e polity. 
+* Correlação entre oil e dem_score14: não existe uma correlação significativa entre oil e dem_score14. No resultado dessa correlação com o p-valor = 0,1041, e com um intervalo de confiança de 95% de resultado = -0,27443572 a 0,02631799, não é possível rejeitar a hipótese nula. Regressão entre oil e dem_score14: o *intercept* é 5,654e+00 e o coeficiente de inclinação da regressão é -1,881e-07. De acordo com os p-valores apenas o *intercept* é estatisticamente significante. O RMSE é igual a 2,177 e esse modelo explica apenas 1,6% da variação em democ_score14.
+* Correlação entre oil e democ11: não existe uma correlação significativa entre oil e democ11. No resultado dessa correlação com o p-valor = 0,08798, e com um intervalo de confiança de 95% de resultado = -0,29928445 a 0,02138076, não é possível rejeitar a hipótese nula. Regressão entre oil e democ11: o *intercept* é 6,139e+00 e o coeficiente de inclinação da regressão é -3,402e-07. De acordo com os p-valores apenas o *intercept* é estatisticamente significante. O RMSE é igual a 3,685 e esse modelo explica 2% da variação em democ11. 
+* Correlação entre oil e fhrate04_rev: No resultado dessa correlação com o p-valor = 0,0562, e com um intervalo de confiança de 95% de resultado = -0,306837012 a 0,004083069 não é possível rejeitar a hipótese nula. Regressão entre oil e fhrate04_rev: o *intercept* é 4,675e+00 e o coeficiente de inclinação da regressão é -1,990e-07. De acordo com os p-valores apenas o *intercept* é estatisticamente significante. O RMSE é igual a 1,934 e esse modelo explica 2,4% da variação em fhrate04_rev. 
+* Correlação entre oil e fhrate08_rev: No resultado dessa correlação com o p-valor = 0,06235, e com um intervalo de confiança de 95% de resultado = -0.304387817 a 0.007867529 não é possível rejeitar a hipótese nula. Regressão entre oil e fhrate08_rev: o *intercept* é 7,378e+00 e o coeficiente de inclinação da regressão é -3,824e-07. De acordo com os p-valores apenas o *intercept* é estatisticamente significante. O RMSE é igual a 3,808 e esse modelo explica 2,3% da variação em fhrate08_rev.
+* Correlação entre oil e polity: No resultado dessa correlação com o p-valor = 0,02979., e com um intervalo de confiança de 95% de resultado = -0,33480603 a -0,01811182 é possível rejeitar a hipótese nula e indicar que existe uma correlação entre as variáveis. Regressão entre oil e polity: o *intercept* é 4,752e+00 e o coeficiente de inclinação da regressão é -7,105e-07. De acordo com o p-valores ambos os coeficientes são estatisticamente significantes. O RMSE é igual a 6.024 e esse modelo explica 3,2% da variação em polity.
+
+### Avalie a relação entre crescimento econômico e produção de petróleo. Descreva a relação entre as duas variáveis, meça a correlação entre elas e faça regressões lineares (interpretando em profundidade os resultados dos coeficientes e medidas de desempenho dos modelos). Enfatize as semelhanças e diferenças entre os resultados. Quais são suas conclusões?
+
+```{r}
+#gdppcap08 e oil 
+
+ggplot(banco, aes(oil, gdppcap08)) +
+ geom_point()+
+ geom_smooth(method = "lm")
+
+cor.test(banco$oil, banco$gdppcap08) 
+
+regressao16 <- lm(gdppcap08 ~ oil, data = banco)
+summary(regressao16)
+
+```
+
+### Resposta(gdppcap08 e oil): A relação entre as duas variáveis é positiva, ou seja, quanto maior a produção de petróleo, maior é o crescimento econômico. É possível afirmar que existe uma correlação entre gdppcap08 e oil, com o p-valor = 0,02254 e um intervalo de confiança de 95%. No modelo de regressão o valor do *intercept* é 1,262e+04 e o coeficiente de inclinação é 1,884e-03, ambos os p-valores indicam que esses coeficientes são significantes. O RMSE é igual a 15280, indicando que a distância média entre os valores observados e os valores estimados é alta, ou seja, podem existir outliers significativos nessa distribuição. De acordo com o R2 esse modelo explica 3,4% da variação em gdppcap08. 
+
+### A partir das suas conclusões sobre a relação entre democracia, economia e produção de petróleo, quais considerações são possíveis fazer sobre a relação CAUSAL entre estas variáveis? Lembre dos 4 "hurdles" do livro *Fundamentals of Political Science Research*
+
+### Resposta entre democracia e desigualdade (Índice de Gini) a correlação só é detectada quando é feito o teste com dem_score14 e fhrate04_rev. Na regressão os valores do intercept e do coeficiente de inclinação só são significativo quando é feito o teste com dem_score14 e fhrate04_rev. Entre os modelos de regressão o que melhor explicou a variação nos graus de democracia foi o que comparou o índice de Gini com o dem_score14, explicando 4% da variação na democracia. Entre democracia e desenvolvimento econômico (gdppcap08) a correlação existe entre todas as variáveis de democracia e a relação entre as variáveis é positiva. Ao analisar a regressão dessa etapa a que melhor explica a variação na democracia é o modelo com dem_score14, no qual o gdppcap08 explica 25% da variação no nível de democracia.  A literatura discute bastante a relação entre democracia (Y) e crescimento econômico (X) ou democracia (Y) e desigualdade (X) (1º *“hurdle”*), no entanto nem todas as medidas de democracia passam pelo 3º *“hurdle”*, pois entre algumas variáveis de democracia não existe correlação com as outras medidas. A literatura também discute o fato de ser o nível de democracia que causa variação no Índice de Gini ou no crescimento econômico, portanto não podemos descartar a chance de Y causar X. Por fim os modelos não levam em consideração outras outras variáveis Z que podem fazer a associação entre X e Y desaparecer. Entre democracia e produção de petróleo (oil) existe uma relação negativa. E só existe correlação entre oil e polity. O único modelo de regressão que possui os dois coeficientes significativos é o modelo com polity, nele oil explica 3,2% da variação na democracia. 
+### Entre crescimento econômico (Y) e produção de petróleo (X) existe uma correlação e a relação é positiva. No entanto, a produção de petróleo explica apenas 3,4% da variação no crescimento econômico.  Nesse caso o modelo passa pelo 1º e 3º *“hurdle”*, porém o modelo não leva em consideração outras outras variáveis Z que podem fazer a associação entre X e Y desaparecer, além do mais não podemos descartar a chance de Y causar X, pois um país mais desenvolvido economicamente possui mais capacidade para produção de petróleo. 
