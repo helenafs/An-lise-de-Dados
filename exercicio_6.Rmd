@@ -1,0 +1,231 @@
+---
+title: "Exercicio 6"
+author: "Helena Santos"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+### Neste exercício usaremos o banco de dados do ESEB 2018. Para maiores detalhes sobre o survey, ver neste [link](https://www.cesop.unicamp.br/por/eseb). O questionário da pesquisa de 2018 está [aqui](https://www.cesop.unicamp.br/vw/1IMr0S64wNQ_MDA_91ea3_/quest_04622.pdf) e pode ser consultado para ter maiores detalhes sobre as variáveis.
+
+### O banco de dados está disponível no site do CESOP para usuários cadastrados. Para facilitar o acesso, deixei o banco de dados dispónivel no seguinte endereço: https://github.com/MartinsRodrigo/Analise-de-dados/raw/master/04622.sav
+
+### Baixe o banco de dados pelo R
+
+```{r}
+
+url <- "https://github.com/MartinsRodrigo/Analise-de-dados/raw/master/04622.sav"
+
+download.file(url, "banco.sav", mode = "wb")
+
+```
+
+### O banco foi feito em SPSS e está em formato SAV. Carregue-o
+
+```{r}
+library(haven)
+
+# SPSS
+banco <- read_sav("banco.sav")
+write_sav(banco, "banco.sav") 
+
+```
+
+### Utilize as funções para observar o banco de dados
+
+```{r}
+library(tidyverse)
+
+glimpse(banco)
+str(banco)
+head (banco)
+tail(banco)
+```
+
+### A variável Q1607 indica uma nota de 0 a 10 ao candidato Jair Bolsonaro. Valores acima de 10 representam respostas não uteis para nossa pesquisa. Represente graficamente esta variável apenas com os valores válidos e descreva o resultado.*OBS: transforme esta variável para númerica com a função `as.numeric()`.
+
+```{r}
+banco$Q1607
+
+banco_filtrado <- banco %>%
+  filter(Q1607 <= 10)
+
+banco_filtrado$Q1607 <- as.numeric(banco_filtrado$Q1607)
+
+ggplot (banco_filtrado,aes(Q1607))+
+geom_histogram(bins = 25)
+
+```
+
+### Resposta: A variável Q1607 indica que as notas dadas ao candidato variam de 0 a 10. Mais respondentes escolheram a nota 10 (mais de 600 observações) e a segunda nota mais escolhida foi a nota 0 (com mais de  500 observações), em terceiro lugar vem a nota 5 (com aproximadamente 250 observações).   
+
+### Vamos procurar entender o que está associado à aprovação deste candidato. Primeiro, vamos observar a idade dos respondentes com a variável D1A_ID. Represente esta variável graficamente.
+
+```{r}
+banco_filtrado$D1A_ID
+
+ggplot (banco_filtrado,aes("",D1A_ID))+
+  geom_boxplot()
+
+```
+
+### Teste a associação entre a nota dada a Jair Bolsonaro e idade do respondente, explicando o resultado.
+
+```{r}
+cor.test(banco_filtrado$D1A_ID, banco_filtrado$Q1607)
+
+``` 
+
+### Resposta: A correlação entre as duas variáveis é positiva de 0,10, ou seja, com o aumento da idade aumenta-se a nota dada a Jair Bolsonaro. Com 95% de confiança (intervalo de confiança = 0,0599630 a 0,1404313) é possível rejeitar a hipótese nula de que a correlação é igual a 0. 
+
+### Faça uma regressao linear mostrando em que medida a idade do respondente explica a avaliação do candidato Jair Bolsonaro. Interprete o resultado.
+
+```{r}
+regressao <- lm(Q1607 ~ D1A_ID, data = banco_filtrado)
+summary(regressao)
+confint(regressao)
+
+```
+
+### Resposta: De acordo com o resultado da regressão para as duas variáveis, ao aumentar 1 ano na idade a nota dada a Jair Bolsonaro aumenta 0,026 aproximadamente, com um intervalo de confiança de 95% (D1A_ID 0,01523726 a 0,03583161) é possível rejeitar a hipótese nula de que a idade causa 0 de varição na nota dada ao político. A idade explica 1% da variação na nota.Os p-valores indicam que os resultados são estatísticamente significantes. 
+
+### Observe a variável D3_ESCOLA dos respondentes relativa a educação Represente esta variável graficamente. #OBS: observe que esta variável está como numérica, apesar de ser categórica ordinal. No entanto, trate-a como numérica, indicando que quanto maior o valor, maior o nível educacional do respondente.
+
+```{r}
+banco_filtrado$D3_ESCOLA
+
+ggplot(banco_filtrado,aes(D3_ESCOLA))+
+  geom_histogram(bins = 25)
+
+```
+
+### Teste a associação entre a nota dada a Jair Bolsonaro e educação do respondente, explicando o resultado.
+
+```{r}
+cor.test(banco_filtrado$D3_ESCOLA, banco_filtrado$Q1607)
+
+``` 
+
+### Resposta: A correlação entre os anos de estudo e a nota dada a Jair Bolsonaro é negativa de -0,0675, ou seja, quantos mais anos de estudo, menor é a nota. O p-valor de 0,001114 indica que essa correlação é estatisticamente significante. Com 95% de confiança (intervalo de confiança = -0,10790092 a -0,02698556) é possível rejeitar a hipótese nula de que a correlação é igual a 0. 
+
+### Faça uma regressao linear mostrando em que medida a educação do respondente explica a avaliação do candidato Jair Bolsonaro. Interprete o resultado.
+
+```{r}
+regressao1 <- lm(Q1607 ~ D3_ESCOLA, data = banco_filtrado)
+summary(regressao1)
+confint(regressao1)
+
+``` 
+
+### Resposta: De acordo com o resultado da regressão para as duas variáveis, ao aumentar 1 unidade na variável D3_ESCOLA a nota de Jair Bolsonaro diminui aproximandamente 0,12. Com um intervalo de confiança de 95% (-0,1894465 a -0,04724737) é possível rejeitar a hipótese nula de que a escolaridade causa 0 de varição na nota dada ao politica. A escolaridade explica 0,45% da variação na nota. Os p-valores indicam que os resultados são estatísticamente significantes.
+
+### Observe a variável D9 sobre renda dos respondentes. Represente esta variável graficamente. #OBS: note que os valores 9999998 e 9999999 devem ser descartados.
+
+```{r}
+banco_filtrado$D9
+
+banco_filtrado_renda <- banco_filtrado %>%
+  filter(D9 != 9999999)%>%
+  filter(D9 != 9999998)
+
+banco_filtrado_renda$D9
+
+ggplot(banco_filtrado_renda, aes("",D9))+
+  geom_boxplot()
+
+```
+
+### Teste a associação entre a nota dada a Jair Bolsonaro e renda do respondente, explicando o resultado.
+
+```{r}
+cor.test(banco_filtrado_renda$D9, banco_filtrado_renda$Q1607)
+
+```
+
+### Resposta: De acordo com o p-valor de 0,84 e com um intervalo de  confiança de 95% (-0,04150014 a 0,05052010), não é possível rejeitar a hipótese nula de que a correlação seja igual a 0. 
+### Faça uma regressao linear mostrando em que medida a renda do respondente explica a avaliação do candidato Jair Bolsonaro. Interprete o resultado.
+
+```{r}
+
+regressao2 <- lm(Q1607 ~ D9, data = banco_filtrado_renda)
+summary(regressao2)
+confint(regressao2)
+
+``` 
+
+### Resposta: De acordo com o resultado da regressão não é possível determinar que o impacto da renda na nota de Jair Bolsonaro seja diferente de 0. Apenas o valor do intercepto é estatisticamente significante. Com um intervalo de 95% de confiança (-5,383427e-05 a 6,554816e-05) não podemos rejeitar a hipótese nula de que o impacto que a renda causa na nota seja igual a 0. 
+
+### Deixando as variáveis socio-economicas de lado, vamos analisar agora variáveis relativas a preferências políticas.
+### A variável Q1501 indica uma nota de 0 a 10 ao PT. Valores acima de 10 representam respostas não uteis para nossa pesquisa. Represente graficamente esta variável apenas com os valores válidos e descreva o resultado.
+
+```{r}
+
+banco_filtrado_PT <- banco_filtrado %>%
+filter (Q1501 <= 10)
+
+ggplot(banco_filtrado_PT, aes(Q1501))+
+  geom_histogram(bins=25)
+
+``` 
+
+### Teste a associação entre a nota dada a Jair Bolsonaro e a nota dada ao PT, explicando o resultado.
+
+```{r}
+cor.test(banco_filtrado_PT$Q1501, banco_filtrado_PT$Q1607)
+
+``` 
+
+### Resposta: Existe uma correlação negativa entre as variáveis de aproximadamente -0.398, ou seja, um aumento na nota do PT diminui a nota dada a Jair Bolsonaro. De acordo com o p-valor < 2.2e-16 e o intervalo de confiança de 95%  (-0,4320901 a -0,3618260) é possível rejeitar a hipótese nula de que a correlação entre as variáveis é igual a 0. 
+### Faça uma regressao linear mostrando em que medida a nota dada ao PT pelo respondente explica a avaliação do candidato Jair Bolsonaro. Interprete o resultado.
+
+```{r}
+regressao3 <- lm(Q1607 ~ Q1501, data = banco_filtrado_PT)
+summary(regressao3)
+confint(regressao3) 
+
+``` 
+
+### Resposta: A nota dada ao PT explica 15,8% da variação na nota dada a Jair Bolsonaro. A mudança em uma unidade da nota do PT diminui aproximadamente 0,41 da nota de Bolsonaro.Com o p-valor <2e-16 *** estatisticamente significante de Q1501 e com o intervalo de confiança de 95% (Q1501 -0,4508089 a -0,3715564) podemos descartar a hipótese nula de que a nota dada ao PT tem 0 de impacto na nota dada a Bolsonaro. 
+### A variável Q18 indica uma auto-atribuição em uma escala ideologica de 0 a 10, da esquerda para a direita. Valores acima de 10 representam respostas não uteis para nossa pesquisa. Represente graficamente esta variável apenas com os valores válidos e descreva o resultado.
+
+```{r}
+banco_filtrado_Q18 <- banco_filtrado %>%
+filter (Q18 <= 10)
+
+ggplot(banco_filtrado_Q18, aes(Q18))+
+  geom_histogram(bins = 25)
+
+```
+
+
+### Teste a associação entre a nota dada a Jair Bolsonaro e a auto-atribuição ideológica, explicando o resultado.
+
+```{r}
+
+cor.test(banco_filtrado_Q18$Q18,banco_filtrado_Q18$Q1607)
+
+``` 
+
+### Resposta: As variáveis possuem uma correlação positiva de aproximadamente 0.35. Sendo assim, um aumento na ideologia (indicando que a pessoa se considera mais a direita) aumenta a nota dada a Jair Bolsonaro. Com o p-valor < 2.2e-16 e o intervalo de confiança de 95% (0,3133128 a 0,3927580) podemos rejeitar a hipótese nula de que a correlação entre as variáveis é igual a 0. 
+### Faça uma regressao linear mostrando em que medida a auto-atribuição ideológica do repondente explica a avaliação do candidato Jair Bolsonaro. Interprete o resultado.
+
+```{r}
+
+regressao4 <- lm(Q1607 ~ Q18, data = banco_filtrado_Q18)
+summary(regressao4)
+confint(regressao4) 
+
+``` 
+
+### Resposta: Quando a variável de ideologia aumenta em uma unidade a nota de Bolsonaro aumenta aproximadamente 0.41. Os p-valores indicam que tanto o valor do intercepto quando do valor de Q18 no modelo são estatisticamente significantes.A variável de ideologia explica aproximadamente 13% de variação na nota dada a Bolsonaro. Com um intervalo de confiança de 95% (Q18 0,3602131 a 0,4586135) é possível rejeitar a hipótese nula de que a ideologia causa 0 de impacto na nota de Bolsonaro. 
+
+### Observando o resultado das regressões, você diria que qual tipo de variável explica mais a variação das notas atribuidas a Jair Bolsonaro, as socio-economicas ou políticas?
+### Olhando os *Multiple R-squared* de cada modelo, as variáveis que mais explicam a variação na nota de Bolsonaro são as variáveis políticas. A Q18 (ideologia) explica 13% da variação a Q1501 (nota do PT) 15,8%. A idade explica 1% da variação, a escolaridade 0,45% e a renda não demonstrou resultados significativos na regressão. 
+
+### Observando o resultado das regressões, você diria que algum modelo erra menos comparado aos outros na nota prevista atribuída a Jair Bolsonaro?
+### Olhando agora para o *Residual standard error* (RMSE) que indica a distância média entre os valores observados e os valores estimados da variável dependente, o modelo que erra menos é o modelo que compara a nota de Bolsonaro com a nota do PT (Residual standard error: 3,643), seguido do modelo que a regressão é feita com a variável de ideologia (Residual standard error: 3.695). 
+
+### Observando o resultado das regressões, você diria que qual(quais) variáveis possui(em) maior efeito no nota atribuída a Jair Bolsonaro?
+### Variável da idade (D1A_ID) o impacto é de +0,025534. Variável da escolaridade (D3_ESCOLA) o impacto é de -0,11835. Varíavel da renda, o impacto não pode ser comprovado. Variável da nota do PT (Q1501) o impacto é de -0,41118. Variável da ideologia (Q18) o impacto é de +0,40941. Portanto, a variável que possui mais efeito na nota de Jair Bolsonaro é a variável da nota do PT, que causa um impacto negativo de 0,41118.
