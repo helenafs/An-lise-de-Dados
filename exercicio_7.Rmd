@@ -1,0 +1,118 @@
+---
+title: "Exercicio 7"
+author: "Helena Santos"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, message = F, warning = F)
+```
+
+### No exercício anterior foram feitos alguns modelos bivariados. Agora faça uma regressão multivariada mostrando como a nota atribuída a Jair Bolsonaro (variável Q1607) pode ser explicada pelas variáveis idade (D1A_ID), educação (D3_ESCOLA), renda (D9), nota atribuída ao PT (Q1501) e auto-atribuição ideológica (Q18) dos respondentes. Interprete o resultado a partir das informações dadas pelo sumário da regressão.
+
+```{r}
+
+library(tidyverse)
+library(haven)
+banco <- read_sav("banco.sav")
+write_sav(banco, "banco.sav")
+
+banco_filtrado <- banco %>%
+  filter(Q1607 <= 10) %>%
+  filter(D9 != 9999999 & D9 != 9999998) %>%
+  filter (Q1501 <= 10) %>%
+  filter (Q18 <= 10) 
+   
+regressao1 <- lm (Q1607 ~ D1A_ID + D3_ESCOLA + D9 + Q1501 + Q18 , data = banco_filtrado)
+summary(regressao1)
+
+confint(regressao1)
+
+``` 
+
+### Resposta: De acordo com a regressão multivariada especificada acima nem a variável de idade (D1A_ID) nem a de renda (D9) possuem resultados estatisticamente significantes, por isso não causam impacto na nota dada a Jair Bolsonaro (Q1607). Porém as variáveis escolaridade (D3_ESCOLA), nota do PT (Q1501) e ideologia (Q18) causam impacto na nota atribuída a Bolsonaro. Esse impacto é de -1,543e-01, -4,154e-01 e 3,244e-01, respectivamente. O modelo explica aproximadamente 28% da variação na Q1607. De acordo com o intervalo de confiança de 95% é possível rejeitar a hipótese nula de que a escolaridade, nota do PT e ideologia causam 0 de impacto na nota de Bolsonaro. 
+
+### Em que medida os resultados se mantém ou se alteram quando comparados com os resultados do exercício anterior, quando foram utilizadas apenas regressões bivariadas?
+
+### Resposta: Como no exercício anterior a variável (D9) de renda tem um impacto que não pode ser comprovado, não significante estatisticamente. Porém no exercício anterior a variável de idade tinha um impacto positivo de 0.025534 na nota de Jair Bolsonaro e agora esse impacto não pode ser comprovado. No exercício anterior a variável da escolaridade (D3_ESCOLA) tinha um impacto negativo, de -0,11835 e agora esse impacto é de -1,543e-01. A variável da nota do PT (Q1501) tinha um impacto de -0,41118, e agora é de -4,154e-01. A variável da ideologia (Q18) tinha um impacto positivo de 0,40941, e agora tem de 3,244e-01. No exercício anterior ao olhar para os *Multiple R-squared* de cada modelo, as variáveis que mais explicavam a variação na nota de Bolsonaro eram as variáveis políticas. A Q18 (ideologia) explicava 13% da variação e a Q1501 (nota do PT) 15,8%. A idade explicava 1% da variação, a escolaridade 0,45% e a renda não demonstrou resultados significativos na regressão. O modelo multivariado do exercício atual tem varíaveis que combinadas explicam aproximadamente 28% da variação na nota de Jair Bolsonaro (Q1607). 
+
+### A partir da exposição de gráficos e testes, avalie se o modelo se adequa aos pressupostos que uma regressão linear exige. 
+
+### Linearidade 
+
+```{r}
+
+plot(regressao1, 1)
+
+``` 
+
+### No caso da linearidade, de acordo com o gráfico, a linha vermelha se aproxima da horizontalidade e está bem próxima da linha pontilhada que cruza o eixo y no valor 0.
+
+### Homocedasticidade
+
+```{r}
+
+plot(regressao1, 3)
+
+library(lmtest)
+
+bptest(regressao1)
+
+library(car)
+
+ncvTest(regressao1) 
+
+``` 
+
+### No caso da Homocedasticidade o pressuposto não é atendido. Pois o p-valor é muito baixo e por isso podemos rejeitar a hipótese nula de que a Homocedasticidade está presente. 
+
+### Autocorrelação entre casos/resíduos
+
+```{r}
+
+acf(regressao1$residuals) 
+
+durbinWatsonTest(regressao1)
+
+``` 
+
+
+### De acordo com o gráfico não existe autocorrelação entre os casos e resíduos. Segundo o teste, com o p-valor alto de 0.038, não é possível rejeitar a hipótese nula de que não existe correlação. 
+
+### Normalidade dos Resíduos
+
+```{r}
+
+plot(regressao1, 2)
+
+library(MASS)
+sresid <- studres(regressao1) 
+shapiro.test(sresid)
+
+``` 
+
+### No caso do gráfico os pontos estão bem próximos da linha diagonal. O teste não corrobora que a distribuição dos resíduos é normal, de acordo com o p-valor de 1.522e-09 podemos rejeitar a hipótese nula de normalidade na distribuição dos resíduos.   
+
+### Caso algum pressuposto não seja satisfeito, quais são as consequências específicas para o modelo estimado?
+
+### Resposta: A Lineariade é um pressuposto sobre o parâmetro β (deve ser constante), ou seja, como as variáveis independentes impactam na variável dependente. A a violação desse pressuposto impede que a estimação por mínimos quadrados ordinários produza o melhor estimador linear não-viesado. A Homocedasticidade significa que a variância do termo de erro é constante para os diferentes valores da variável independente, a diferença entre os resultados observados dos resíduos e os resultados preditos pelo modelo devem variar uniformemente. A violação desse pressuposto é preocupante na medida em que afeta a confiabilidade dos testes de significância e intervalos de confiança. Autocorrelação entre casos/resíduos, os termos de erros são independentes entre si. As observações devem ser independentes, uma observação não pode afetar a outra, a violação desse pressuposto causa problemas na confiabilidade dos testes de significância e intervalos de confiança. A Normalidade dos Resíduos pressupõe que o erro amostral deve seguir uma distribuição aproximadamente normal para que os estimadores dos βs das variáveis independentes e σ (sigma) encontrados sejam não-viesados e eficientes. O modelo estimado anterior não satisfaz os pressupostos da Homocedasticidade e da distribuição normal dos resíduos, portanto são afetadas a confiabilidade dos testes de significância e intervalos de confiança e os estimadores dos βs e do σ são viesados e ineficientes. 
+
+### Considerando o 4o hurdle do livro *Fundamentals...*, faça um modelo de regressão extra adicionando uma variável **numérica** que foi omitida do modelo anterior, mas que possa ter relação causal com a variável dependente (e talvez alguma associação com as independentes anteriores). Justifique a variável extra e analise o resultado.
+
+### Compare o resultado obtido com o modelo e conclusões anteriores.
+
+### Nesse caso utilizarei a variável que indica Religião (D10) que possui os valores 98 (Não sabe) e 99 (Não respondeu) que não são necessários para a análise, por isso serão retirados do banco. A escolha dessa variável se deve ao fato de que o candidato Bolsonaro tem bases mais fortes em certos tipos de religiões no Brasil.
+
+```{r}
+
+banco_religiao  <- banco_filtrado %>%
+  filter(D10 != 99 & D10 != 98) 
+
+
+regressao2 <- lm (Q1607 ~ D1A_ID + D3_ESCOLA + D9 + Q1501 + Q18 + D10 , data = banco_religiao)
+summary(regressao2)
+confint(regressao2)
+
+```
+
+### Resposta: A variável adicionada ao modelo não possui resultados estatisticamente significantes. Além disso com um intervalo de confiança de 95% ( -0,0074305798 a 5,696184e-03) não é possível rejeitar a hipótese nula de que a variável da religião impacta na nota de Bolsonaro. De acordo com o novo modelo as variáveis que impactam na nota de Bolsonaro continuam sendo escolaridade, nota do PT e ideologia. O novo modelo explica apenas 0,30% a mais que o modelo anterior de acordo com o *Multiple R-squared*. No modelo que inclui religião o impacto que a escolaridade, nota do PT e ideologia causa na nota de Bolsonaro variou muito pouco, -1,515e-01, -4,202e-01 e 3,240e-01, respectivamente.   
