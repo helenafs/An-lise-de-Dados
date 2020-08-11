@@ -113,7 +113,7 @@ confint(regressao1)
 ### Outra variável categórica bastante presente no debate sobre voto na última eleição é religião (D10). Represente esta variável graficamente.
 
 ``` r
-ggplot( banco, aes( D10, fill = D10 ) ) +
+ggplot( banco, aes(D10, fill = D10 ) ) +
         geom_bar( )+
         theme_classic () 
 ```
@@ -230,14 +230,14 @@ confint(regressao2)
 ``` r
 ggplot (banco, aes (D2_SEXO, Q1607, color = religiao)) + 
   geom_jitter()+ 
-  theme_minimal () 
+  theme_minimal ()
 ```
 
 ![](exercicio_8_files/figure-gfm/unnamed-chunk-11-1.png)<!-- -->
 
 ``` r
-regresso3 <- lm(Q1607 ~ D2_SEXO + religiao, data = banco)
-summary(regresso3)
+regressao3 <- lm(Q1607 ~ D2_SEXO + religiao, data = banco)
+summary(regressao3)
 ```
 
     ## 
@@ -263,7 +263,7 @@ summary(regresso3)
     ## F-statistic: 25.46 on 4 and 2321 DF,  p-value: < 2.2e-16
 
 ``` r
-confint(regresso3)
+confint(regressao3)
 ```
 
     ##                               2.5 %      97.5 %
@@ -273,4 +273,15 @@ confint(regresso3)
     ## religiaoNão tem religião -1.2807278 -0.08181084
     ## religiaoOutras           -1.8692530 -0.75671984
 
-### Resposta: Aqui o valor do intercepto estimado é 5,9493 de acordo com o p-valor \< 2e-16, esse resultado é estatisticamente significante, ou seja, a nota de Bolsonaro assume esse valor quando as variáveis caregóricas forem igual a 0 (categorias de referência). Nessa regressão são duas categorias de referência uma para sexo e outra para religião, Masculino e Católica, respectivamente. No caso da variável do sexo o resultado da regressão com p-valor estatisticamente significante de 6,07e-10 e intervalo de confiança de 95% (-1,3214476 a -0,68754476) é possível afirmar que as pessoas do sexo feminino dão uma nota 1,0045 menor que as do sexo masculino. A categoria Evangélica atribui uma nota 0,8637 maior que os Católicos, dado o p-valor = 2,36e-06 e o intervalo de confiança (95%) de 0,5057662 a 1,22158996. A categoria “Não tem religião” atribui uma nota 0,6813 menor a Bolsonaro que os Católicos, tanto o p-valor de 0,0259, quanto o intervalo de confiança (95%) de -1,2807278 a -0,08181084 corroboram esse resultado. No caso dos que tem outras religiões a nota é 1,3130 menor que a nota dos Católicos.O p-valor de 3,88e-06 e o intervalo de confiança (95%), de -1,8692530 a -0,75671984, confirmam esse resultado. A religião e o sexo explicam 4,20% na variação da nota de Bolsonaro. Nesse modelo o erro residual é de 3,889.
+``` r
+library(dotwhisker)
+
+dwplot(regressao3,
+vline = geom_vline(xintercept = 0, colour = "grey60", linetype = 2))
+```
+
+![](exercicio_8_files/figure-gfm/unnamed-chunk-11-2.png)<!-- -->
+
+### Resposta: De acordo com o gráfico dwplot nenhum dos intervalos de confiança dos coeficientes cruza o 0, portanto todos os coeficientes são estatisticamente significantes.
+
+### Aqui o valor do intercepto estimado é 5,9493 de acordo com o p-valor \< 2e-16, esse resultado é estatisticamente significante, ou seja, a nota de Bolsonaro assume esse valor quando as variáveis caregóricas forem igual a 0 (categorias de referência). Nessa regressão são duas categorias de referência uma para sexo e outra para religião, Masculino e Católica, respectivamente. No caso da variável do sexo o resultado da regressão com p-valor estatisticamente significante de 6,07e-10 e intervalo de confiança de 95% (-1,3214476 a -0,68754476) é possível afirmar que as pessoas do sexo feminino dão uma nota 1,0045 menor que as do sexo masculino. A categoria Evangélica atribui uma nota 0,8637 maior que os Católicos, dado o p-valor = 2,36e-06 e o intervalo de confiança (95%) de 0,5057662 a 1,22158996. A categoria “Não tem religião” atribui uma nota 0,6813 menor a Bolsonaro que os Católicos, tanto o p-valor de 0,0259, quanto o intervalo de confiança (95%) de -1,2807278 a -0,08181084 corroboram esse resultado. No caso dos que tem outras religiões a nota é 1,3130 menor que a nota dos Católicos.O p-valor de 3,88e-06 e o intervalo de confiança (95%), de -1,8692530 a -0,75671984, confirmam esse resultado. A religião e o sexo explicam 4,20% na variação da nota de Bolsonaro. Nesse modelo o erro residual é de 3,889.
