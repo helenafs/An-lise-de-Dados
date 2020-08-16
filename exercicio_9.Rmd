@@ -1,0 +1,79 @@
+---
+title: "Exercicio 9"
+Nome: Helena Santos
+output: github_document
+
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning = F, message = F)
+```
+
+### Continuaremos com a utilização dos dados do ESEB2018. Carregue o banco da mesma forma que nos exercicios anteriores
+
+```{r}
+library(tidyverse)
+library(haven)
+library(scales)
+
+banco <- read_spss("04622.sav") 
+
+banco <- banco %>%
+  mutate(D10 = as_factor(D10)) %>%
+  filter(Q1607 < 11, 
+         Q18 < 11,
+         D9 < 9999998,
+         Q1501 < 11)
+```
+
+### Crie a mesma variável de religião utilizada no exercício anterior
+
+```{r}
+Outras <- levels(banco$D10)[-c(3,5,13)]
+
+banco <- banco %>%
+  mutate(religiao = case_when(D10 %in% Outras ~ "Outras",
+                              D10 == "Católica" ~ "Católica",
+                              D10 == "Evangélica" ~ "Evangélica",
+                              D10 == "Não tem religião" ~ "Não tem religião"))
+
+
+ggplot(banco, aes(religiao, ..count../sum(..count..) )) +
+  geom_bar() +
+  scale_y_continuous(labels = percent)
+
+
+```
+
+### Faça uma regressão linear avaliando em que medida as variáveis independentes utilizadas nos exercícios 7 e 8, idade(D1A_ID), educação (D3_ESCOLA), renda (D9), nota atribuída ao PT (Q1501), auto-atribuição ideológica (Q18), sexo (D2_SEXO) e religião (variável criada no passo anterior) explicam a avaliação de Bolsonaro (Q1607), mas com uma interação entre as variáveis religião e sexo. Exiba o resultado da regressão e interprete os valores dos coeficientes $\beta$s estimados.
+
+```{r}
+
+regressao <- lm( Q1607 ~ D1A_ID + D3_ESCOLA + D9 + Q1501 + Q18 + D2_SEXO + religiao + religiao * D2_SEXO, data = banco )
+
+summary(regressao)
+confint(regressao)
+
+
+
+```
+
+### Interprete a significancia estatística dos coeficientes estimados
+
+### Resposta: O intercepto estimado dessa regressão é 6,114e+00, o p-valor < 2e-16 e o intervalo de confiança de 95% (4,954254e+00 a 7,274692e+00) corroboram esse resultado. O  intercepto indica a nota de Bolsonaro quando todos os coeficientes são iguais a 0. A variável que indica a idade (D1A_ID) não causa impacto na nota de Bolsonaro. A variável D3_ESCOLA causa um impacto negativo de 1,134e-01 na nota de Bolsonaro, o p-valor de 0,0117 e o intervalo de confiança de 95% (-2,014868e-01 a -2,527982e-02) confirmam esse resultado. A variável que indica a renda (D9) não causa impacto na nota de Bolsonaro. A variável Q1501 que indica a nota atribuída ao PT causa um impacto negativo de 3,956e-01 na nota de Bolsonaro, aqui o intervalo de confiança de 95% (-4,421265e-01 a -3,491597e-01) e o p-valor <2e-16 comprovam esse resultado. A variável de auto-atribuição ideológica (Q18) causa um impacto positivo na nota de Bolsonaro de 3,150e-01, tanto o p-valor <2e-16, quanto o intervalo de confiança de 95% (2,638804e-01 a 3,661651e-01) confirmam que a variável Q18 causa esse impacto. De acordo com o R^2, o modelo explica 30% da variação na nota de Bolsonaro. Porém ele erra em média 3,297 no valor da variável dependente. 
+
+### Faça um gráfico que mostre a interação entre as duas variáveis. Interprete o resultado apresentado
+
+```{r}
+
+library(sjPlot)
+
+plot_model(regressao, type = "pred", 
+           terms = c("religiao", "D2_SEXO"), 
+           ci.lvl = 0.9)
+ 
+``` 
+
+### Resposta: Nas variáveis categóricas, sexo e religião, as categorias de referência são homens e religião católica. Então se o sexo for feminino a variável de sexo causa um impacto de -6,115e-01 na nota de Bolsonaro em relação aos homens católicos. Quando o sexo é masculino (0) a religião evangélica causa um impacto de 1,181e+00 na variável Q1607 em relação à religião católica, porém mesmo com esse impacto o p-valor só é estatisticamente significante no nível  0,1. No caso da categoria de religião "outras" o p-valor também é estatisticamente significante no nível 0,1, no entanto o gráfico não corrobora esse resultado.  De acordo com o gráfico só existe diferença de impacto na nota de Bolsonaro entre homem e mulher na religião evangélica e na religião católica. Na categoria "outras" e "não tem religião" não faz diferença ser homem ou mulher em relação a nota dada a Bolsonaro, o p-valor da categoria "não tem religião" (0,8512) confirma esse resultado. 
+
+
