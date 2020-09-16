@@ -152,23 +152,14 @@ plot (regressao2, 5)
 
 ![](exercicio_11_files/figure-gfm/unnamed-chunk-5-2.png)<!-- -->
 
-``` r
-outlierTest(regressao2)
-```
-
-    ## No Studentized residuals with Bonferroni p < 0.05
-    ## Largest |rstudent|:
-    ##     rstudent unadjusted p-value Bonferroni p
-    ## 271 -2.76344          0.0057918           NA
-
 ### Faça a regressao linear sem a observação mais influente e avalie a alteração do resultado
 
 ``` r
 banco_outlier <- banco %>%
-  slice (-c (140, 171, 411))
+  slice (-c (160, 399, 1442))
 
-regressao3 <- lm (Q1607 ~ D1A_ID + D3_ESCOLA + D9 + Q1501 + Q18 + D2_SEXO + religiao, 
-                  data = banco_outlier)
+regressao3 <- lm (Q1607 ~ D1A_ID + D3_ESCOLA + D9 + Q1501 + Q18 + D2_SEXO + religiao, data = banco_outlier)
+
 summary(regressao3)
 ```
 
@@ -179,27 +170,25 @@ summary(regressao3)
     ## 
     ## Residuals:
     ##     Min      1Q  Median      3Q     Max 
-    ## -9.0592 -2.5769  0.4076  2.3267  8.9938 
+    ## -9.0996 -2.5077  0.4035  2.2973  8.6938 
     ## 
     ## Coefficients:
     ##                            Estimate Std. Error t value Pr(>|t|)    
-    ## (Intercept)               6.218e+00  5.374e-01  11.571  < 2e-16 ***
-    ## D1A_ID                    1.027e-02  6.245e-03   1.645 0.100158    
-    ## D3_ESCOLA                -1.118e-01  4.490e-02  -2.490 0.012903 *  
-    ## D9                       -3.643e-05  2.767e-05  -1.317 0.188161    
-    ## Q1501                    -3.948e-01  2.371e-02 -16.653  < 2e-16 ***
-    ## Q18                       3.161e-01  2.609e-02  12.114  < 2e-16 ***
-    ## D2_SEXO                  -6.834e-01  1.749e-01  -3.907 9.78e-05 ***
-    ## religiaoEvangélica        6.650e-01  1.986e-01   3.348 0.000835 ***
-    ## religiaoNão tem religião -7.635e-02  3.487e-01  -0.219 0.826736    
-    ## religiaoOutras           -8.069e-01  3.100e-01  -2.603 0.009340 ** 
+    ## (Intercept)               6.219e+00  5.350e-01  11.625  < 2e-16 ***
+    ## D1A_ID                    1.107e-02  6.251e-03   1.771 0.076819 .  
+    ## D3_ESCOLA                -1.014e-01  4.534e-02  -2.236 0.025517 *  
+    ## D9                       -5.402e-05  3.347e-05  -1.614 0.106743    
+    ## Q1501                    -3.988e-01  2.365e-02 -16.865  < 2e-16 ***
+    ## Q18                       3.179e-01  2.600e-02  12.227  < 2e-16 ***
+    ## D2_SEXO                  -7.128e-01  1.747e-01  -4.080 4.75e-05 ***
+    ## religiaoEvangélica        6.813e-01  1.979e-01   3.443 0.000593 ***
+    ## religiaoNão tem religião -1.583e-01  3.489e-01  -0.454 0.650163    
+    ## religiaoOutras           -8.262e-01  3.072e-01  -2.690 0.007234 ** 
     ## ---
     ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
     ## 
-    ## Residual standard error: 3.299 on 1449 degrees of freedom
-    ## Multiple R-squared:  0.3006, Adjusted R-squared:  0.2962 
-    ## F-statistic: 69.19 on 9 and 1449 DF,  p-value: < 2.2e-16
+    ## Residual standard error: 3.286 on 1449 degrees of freedom
+    ## Multiple R-squared:  0.306,  Adjusted R-squared:  0.3017 
+    ## F-statistic:    71 on 9 and 1449 DF,  p-value: < 2.2e-16
 
-### Resposta: sem as três observações mais influentes demonstradas pelo gráfico *Cook’s Distance* (140, 171 e 411) as variáveis que tem uma influência estatística significativa são:D3\_ESCOLA (p-valor: 0,012903), Q1501 e Q18 (p-valores: \< 2e-16), D2\_SEXO (p-valor: 9.78e-05), a religião Evangêlica é causa um impacto diferente da católica (p-valor: 0,000835) e a categoria de religião outras também (p-valor: 0,009340).
-
-### Em comparação com o resultado anterior com o problema de heterocedasticidade corrigido (coeftest) o intercepto passou a ter um p-valor ainda mais baixo; a variável D3\_ESCOLA ficou com um p-valor mais alto, porém, ainda significativo; a variável D9 deixou de causar um impacto significante na nota de Bolsonaro; as variáveis Q1501 e Q18 passaram a causar um impacto significativo na nota de Bolsonaro; a variável D2\_SEXO passou a ter um p-valor mais baixo e o impacto na nota passou a ser negativo, indicando que aqui a categoria de referência é homem. A religião evangêlica ainda causa um impacto diferente da religião católica, porém agora com um p-valor mais baixo e a categoria outras passou a ser estatisticamente diferente da categoria católica. Em relação ao R^2 ele aumentou em comparação com a primeira regressão do exercício, agora o modelo explica 30% da variação na nota de Bolsonaro, o *Residual standard error* também diminuiu, passando de 16,78 para 3,299.
+### Resposta: Sem as três observações mais influentes demonstradas pelo gráfico *Cook’s Distance* (160, 399, 1442) o resultado da regressão continuou praticamente o mesmo. O intercepto, as variáveis D1A\_ID, D3\_ESCOLA, Q1501, Q18 e D2\_SEXO continuam estatisticamente significativas no mesmo nível e seus valores estimados ficaram muito parecidos. A variável D9 continua sem significância estatística. E no caso da religião, a categoria Evangêlica e Outras continuam sendo diferentes da categoria católica, os p-valores continuam sendo significantes no mesmo nível e seus valores estimados não mudaram muito. No caso do R^2 os modelos continuam explicando 30% da variação em Q1607 e o *Residual standard error* variou de 3,296 para 3,286.
