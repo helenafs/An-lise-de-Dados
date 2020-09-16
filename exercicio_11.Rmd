@@ -50,7 +50,6 @@ summary(regressao2)
 ### Faça o teste de homoscedasticidade do modelo e corrija as estimações dos coeficientes caso seja necessário.
 
 ```{r}
-
 plot(regressao2, 3)
 
 plot(regressao2, 1)
@@ -61,7 +60,6 @@ bptest(regressao2)
 library(car)
 ncvTest(regressao2) 
 
-install.packages("sandwich")
 library(sandwich)
 
 coeftest(regressao2, 
@@ -87,7 +85,6 @@ plot (regressao2, 4)
 
 plot (regressao2, 5)
 
-outlierTest(regressao2)
 
 ```
 
@@ -95,14 +92,13 @@ outlierTest(regressao2)
 
 ```{r}
 banco_outlier <- banco %>%
-  slice (-c (140, 171, 411))
+  slice (-c (160, 399, 1442))
 
-regressao3 <- lm (Q1607 ~ D1A_ID + D3_ESCOLA + D9 + Q1501 + Q18 + D2_SEXO + religiao, 
-                  data = banco_outlier)
+regressao3 <- lm (Q1607 ~ D1A_ID + D3_ESCOLA + D9 + Q1501 + Q18 + D2_SEXO + religiao, data = banco_outlier)
+
 summary(regressao3)
 
 ```
 
-### Resposta: sem as três observações mais influentes demonstradas pelo gráfico *Cook's Distance* (140, 171 e 411) as variáveis que tem uma influência estatística significativa são:D3_ESCOLA (p-valor: 0,012903), Q1501 e Q18 (p-valores: < 2e-16), D2_SEXO (p-valor: 9.78e-05), a religião Evangêlica é causa um impacto diferente da católica (p-valor: 0,000835) e a categoria de religião outras também (p-valor: 0,009340). 
-### Em comparação com o resultado anterior com o problema de heterocedasticidade corrigido (coeftest) o intercepto passou a ter um p-valor ainda mais baixo; a variável D3_ESCOLA ficou com um p-valor mais alto, porém, ainda significativo; a variável D9 deixou de causar um impacto significante na nota de Bolsonaro; as variáveis Q1501 e Q18 passaram a causar um impacto significativo na nota de Bolsonaro; a variável D2_SEXO passou a ter um p-valor mais baixo e o impacto na nota passou a ser negativo, indicando que aqui a categoria de referência é homem. A religião evangêlica ainda causa um impacto diferente da religião católica, porém agora com um p-valor mais baixo e a categoria outras passou a ser estatisticamente diferente da categoria católica. Em relação ao R^2 ele aumentou em comparação com a primeira regressão do exercício, agora o modelo explica 30% da variação na nota de Bolsonaro, o *Residual standard error* também diminuiu, passando de 16,78 para 3,299. 
+### Resposta: Sem as três observações mais influentes demonstradas pelo gráfico *Cook’s Distance* (160, 399, 1442) o resultado da regressão continuou praticamente o mesmo. O intercepto, as variáveis D1A_ID, D3_ESCOLA, Q1501, Q18 e D2_SEXO continuam estatisticamente significativas no mesmo nível e seus valores estimados ficaram muito parecidos. A variável D9 continua sem significância estatística. E no caso da religião, a categoria Evangêlica e Outras continuam sendo diferentes da categoria católica, os p-valores continuam sendo significantes no mesmo nível e seus valores estimados não mudaram muito. No caso do R^2 os modelos continuam explicando 30% da variação em Q1607 e o *Residual standard error* variou de 3,296 para 3,286. 
 
